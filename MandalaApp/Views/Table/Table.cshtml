@@ -1,0 +1,837 @@
+﻿@model List<MandalaApp.Models.MandalaDetail>
+
+@{
+    ViewData["Title"] = "Table";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var targetOptions = (IEnumerable<SelectListItem>)ViewBag.TargetOptions;
+    var sortedModel = Model.OrderBy(x => x.MandalaLv)
+                           .ThenBy(x => x.Deadline)
+                           .ToList();
+}
+
+<head>
+    <!-- Font Awesome và Google Font Roboto -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ff385c;
+            --primary-hover: #e6004c;
+            --secondary-color: #f1f1f1;
+            --text-color: #444;
+            --placeholder-color: #bbb;
+            --label-color: #555;
+            --background: #f8f8f8;
+            --container-bg: #fff;
+            --box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            --hover-bg: #f2f2f2;
+        }
+        /* Reset cơ bản */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--background);
+            font-family: 'Roboto', sans-serif;
+        }
+        /* Style cho filter UI */
+        .filter-container {
+            display: flex;
+            align-items: center;
+            background: var(--container-bg);
+            padding: 10px 20px;
+            border-radius: 30px;
+            box-shadow: var(--box-shadow);
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .filter-item {
+            flex: 1;
+            padding: 10px;
+            cursor: pointer;
+            border-right: 1px solid #ddd;
+            transition: background-color 0.3s;
+            text-align: left;
+        }
+
+            .filter-item:last-child {
+                border-right: none;
+            }
+
+            .filter-item:hover {
+                background-color: var(--hover-bg);
+            }
+
+            .filter-item label {
+                font-size: 12px;
+                color: var(--label-color);
+                margin-bottom: 5px;
+                display: block;
+            }
+
+            .filter-item input {
+                border: none;
+                outline: none;
+                width: 100%;
+                font-size: 14px;
+                color: var(--text-color);
+                background: transparent;
+            }
+
+                .filter-item input::placeholder {
+                    color: var(--placeholder-color);
+                }
+
+        .search-button {
+            background: var(--primary-color);
+            border: none;
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-left: 10px;
+        }
+
+            .search-button:hover {
+                background: var(--primary-hover);
+            }
+
+            .search-button i {
+                font-size: 16px;
+            }
+        /* Popup cho Mục Tiêu */
+        .group-popup {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translate(-50%, 15px);
+            width: 320px;
+            background: var(--container-bg);
+            box-shadow: var(--box-shadow);
+            border-radius: 10px;
+            padding: 15px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 100;
+        }
+
+            .group-popup.show {
+                opacity: 1;
+                pointer-events: auto;
+                transform: translate(-50%, 0);
+            }
+
+        .group-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding: 10px 0;
+        }
+
+            .group-options label {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 14px;
+                cursor: pointer;
+                background: var(--secondary-color);
+                padding: 8px;
+                border-radius: 8px;
+                transition: background 0.3s, color 0.3s;
+            }
+
+                .group-options label:hover {
+                    background: var(--primary-color);
+                    color: #fff;
+                }
+
+            .group-options input {
+                display: none;
+            }
+
+                .group-options input:checked + label {
+                    background: var(--primary-color);
+                    color: #fff;
+                    font-weight: 500;
+                }
+
+        .btn-close {
+            display: block;
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+            .btn-close:hover {
+                background: var(--primary-hover);
+            }
+        /* Style cho bảng */
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            table-layout: fixed;
+            background: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            text-align: left;
+            vertical-align: middle;
+            word-wrap: break-word;
+            white-space: normal;
+            word-break: break-all;
+        }
+
+        th {
+            background: #BBDEFB;
+            font-weight: 600;
+        }
+        /* Cài đặt lại độ rộng của các cột trong thead */
+        #excelTable thead th:nth-child(1) {
+            width: 70px;
+        }
+
+        #excelTable thead th:nth-child(2) {
+            width: 270px;
+        }
+
+        #excelTable thead th:nth-child(3) {
+            width: 270px;
+        }
+
+        #excelTable thead th:nth-child(4) {
+            width: 100px;
+        }
+
+        #excelTable thead th:nth-child(7) {
+            width: 350px;
+        }
+        /* Responsive cho filter */
+        @@media (max-width: 768px) {
+            .filter-container
+
+        {
+            flex-direction: column;
+            border-radius: 20px;
+            width: 90%;
+        }
+
+        .filter-item {
+            border-right: none;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+            .filter-item:last-child {
+                border-bottom: none;
+            }
+
+        .search-button {
+            margin: 20px auto 0;
+        }
+
+        .group-popup {
+            width: 90%;
+            left: 50%;
+            transform: translate(-50%, 15px);
+        }
+
+        }
+        /* CSS cho container bảng có thanh cuộn ngang không giới hạn */
+        .table-responsive {
+            overflow-x: scroll; /* Luôn hiển thị thanh cuộn ngang */
+        }
+            /* Đặt min-width cho bảng để kéo ngang nếu cần */
+            .table-responsive table {
+                min-width: 2000px; /* Tăng chiều dài của bảng, giá trị có thể điều chỉnh */
+            }
+    </style>
+</head>
+
+<div id="content-wrapper" class="d-flex flex-column">
+    <div id="content">
+        <!-- Toolbar cũ -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar fixed-top shadow px-3" style="margin-left:104px">
+            <div class="d-flex align-items-center">
+                <button type="button" class="btn btn-outline-primary btn-sm mx-1" onclick="saveData()">
+                    <i class="fas fa-save"></i> Save
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-sm mx-1" onclick="undo()">
+                    <i class="fas fa-undo"></i> Undo
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-sm mx-1" onclick="redo()">
+                    <i class="fas fa-redo"></i> Redo
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-sm mx-1" onclick="addRow()">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-sm mx-1" onclick="deleteRows()">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+            <div class="mx-auto d-flex align-items-center justify-content-center">
+                <span id="mandalaNameText" class="text-primary font-weight-bold" style="font-size:2.5rem;">
+                    @ViewBag.MandalaName
+                </span>
+                <input type="hidden" id="mandalaId" value="@ViewBag.Id" />
+                <button id="editMandalaNameBtn" type="button" class="btn btn-sm btn-outline-primary ml-2" onclick="editMandalaName()">Edit</button>
+            </div>
+            <div class="nav-item dropdown no-arrow ml-auto">
+                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">@User.FindFirst("FullName")?.Value</span>
+                    <img class="img-profile rounded-circle" src="img/undraw_profile.svg" width="40" height="40">
+                </a>
+                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                    <a class="dropdown-item" href="/Profile/Profile">
+                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Profile
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Phần Filter mới -->
+        <div class="container-fluid topbar fixed-top" style="margin-top:70px">
+            <div class="filter-container">
+                <!-- Chỉ Tiêu -->
+                <div class="filter-item">
+                    <label for="criteria">Chỉ Tiêu</label>
+                    <input type="text" id="criteria" placeholder="Nhập chỉ tiêu">
+                </div>
+                <!-- Deadline bắt đầu -->
+                <div class="filter-item">
+                    <label for="startDate">Deadline Bắt Đầu</label>
+                    <input type="date" id="startDate">
+                </div>
+                <!-- Deadline kết thúc -->
+                <div class="filter-item">
+                    <label for="endDate">Deadline Kết Thúc</label>
+                    <input type="date" id="endDate">
+                </div>
+                <!-- Người thực hiện -->
+                <div class="filter-item">
+                    <label for="assignee">Người Thực Hiện</label>
+                    <input type="text" id="assignee" placeholder="Nhập tên người">
+                </div>
+                <!-- Popup chọn Mục Tiêu -->
+                <div class="filter-item" id="muctieuSelector">
+                    <label>Mục Tiêu</label>
+                    <span id="selectedMuctieuText">Chọn Mục Tiêu</span>
+                    <div class="group-popup" id="muctieuPopup">
+                        <div class="group-options">
+                            <input type="checkbox" id="M1" name="muctieu" value="M1">
+                            <label for="M1">M1</label>
+                            <input type="checkbox" id="M2" name="muctieu" value="M2">
+                            <label for="M2">M2</label>
+                            <input type="checkbox" id="M3" name="muctieu" value="M3">
+                            <label for="M3">M3</label>
+                            <input type="checkbox" id="M4" name="muctieu" value="M4">
+                            <label for="M4">M4</label>
+                            <input type="checkbox" id="M5" name="muctieu" value="M5">
+                            <label for="M5">M5</label>
+                            <input type="checkbox" id="M6" name="muctieu" value="M6">
+                            <label for="M6">M6</label>
+                            <input type="checkbox" id="M7" name="muctieu" value="M7">
+                            <label for="M7">M7</label>
+                            <input type="checkbox" id="M8" name="muctieu" value="M8">
+                            <label for="M8">M8</label>
+                            <input type="checkbox" id="M9" name="muctieu" value="M9">
+                            <label for="M9">M9</label>
+                        </div>
+                        <button class="btn-close" onclick="closeMuctieuPopup()">Xác nhận</button>
+                    </div>
+                </div>
+                <!-- Nút tìm kiếm -->
+                <button class="search-button" onclick="search()">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Phần Table với thanh cuộn ngang -->
+        <div class="table-responsive ml-5" style="margin-top:180px">
+            <div id="tableContainer">
+                @using (Html.BeginForm("Save", "Table", FormMethod.Post, new { id = "excelForm" }))
+                {
+                    <table id="excelTable" class="table table-bordered" style="border-right-width: 80px;">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Chỉ Tiêu</th>
+                                <th>Thời hạn</th>
+                                <th>Trạng thái</th>
+                                <th>Hành động cụ thể</th>
+                                <th>Kết quả</th>
+                                <th>Người thực hiện</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < sortedModel.Count; i++)
+                            {
+                                <tr>
+                                    <td>
+                                        <span class="rowIndex">@(i + 1)</span>
+                                        @Html.HiddenFor(model => sortedModel[i].ID, new { @class = "hiddenID" })
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => sortedModel[i].Target,
+                                                 targetOptions,
+                                                 "Chọn chỉ tiêu",
+                                                 new { @class = "targetSelect" })
+                                        @Html.HiddenFor(model => sortedModel[i].MandalaLv, new { @class = "hiddenMandalaLv" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => sortedModel[i].Deadline, "{0:yyyy-MM-dd}", new { type = "date", @class = "form-control" })
+                                    </td>
+                                    <td>
+                                        @Html.CheckBoxFor(model => sortedModel[i].Status)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => sortedModel[i].Action, new { @class = "form-control" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => sortedModel[i].Result, new { @class = "form-control" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => sortedModel[i].Person, new { @class = "form-control" })
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+        <!-- End Table Content -->
+    </div>
+</div>
+
+<!-- Logout Modal (không thay đổi) -->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="logoutModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Select "Logout" below if you are ready to end your current session.
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <form method="post" action="@Url.Action("Logout", "Account")">
+                    <button class="btn btn-primary" type="submit">Logout</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include các scripts cần thiết -->
+<script src="~/vendor/jquery/jquery.min.js"></script>
+<script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+<script>
+    // --- Các biến và hàm của chức năng bảng (undo, redo, add, delete, sắp xếp) ---
+    var undoHistory = [];
+    var redoHistory = [];
+    var deletedIds = [];
+    var $templateRow = null; // Dòng mẫu dùng để clone khi thêm row
+    var levelOrder = []; // Mảng chứa thứ tự target dựa trên targetOptions
+
+    // Hàm debounce
+    function debounce(fn, delay) {
+        var timer;
+        return function() {
+            var context = this, args = arguments;
+            clearTimeout(timer);
+            timer = setTimeout(function() { fn.apply(context, args); }, delay);
+        };
+    }
+
+    // Lấy dữ liệu của 1 dòng
+    function getRowData($row) {
+        var idVal = $row.find("input.hiddenID").val();
+        return {
+            ID: idVal === "" ? 0 : idVal,
+            Target: $row.find("select.targetSelect").val() || "",
+            Deadline: $row.find("input[type='date']").val() || "",
+            Status: $row.find("input[type='checkbox']").prop("checked") || false,
+            Action: $row.find("input[name$='.Action']").val() || "",
+            Result: $row.find("input[name$='.Result']").val() || "",
+            Person: $row.find("input[name$='.Person']").val() || ""
+        };
+    }
+
+    // Lấy trạng thái của toàn bộ bảng
+    function getFormState() {
+        var state = [];
+        $("#excelTable tbody tr").each(function() { state.push(getRowData($(this))); });
+        return state;
+    }
+
+    // Gán dữ liệu cho 1 dòng
+    function setRowData($row, data) {
+        $row.find("input.hiddenID").val(data.ID);
+        $row.find("select.targetSelect").val(data.Target);
+        $row.find("input[type='date']").val(data.Deadline);
+        $row.find("input[type='checkbox']").prop("checked", data.Status);
+        $row.find("input[name$='.Action']").val(data.Action);
+        $row.find("input[name$='.Result']").val(data.Result);
+        $row.find("input[name$='.Person']").val(data.Person);
+    }
+
+    // Lấy trạng thái hoàn chỉnh (bảng và deletedIds)
+    function getCompleteState() {
+        return { tableState: getFormState(), deletedIds: deletedIds.slice() };
+    }
+
+    // Gán lại trạng thái cho bảng
+    function setFormState(stateObj) {
+        var tableState = stateObj.tableState;
+        deletedIds = stateObj.deletedIds.slice();
+        var $tbody = $("#excelTable tbody");
+        $tbody.empty();
+        for (var i = 0; i < tableState.length; i++) {
+            var $newRow;
+            if ($templateRow) { $newRow = $templateRow.clone(); }
+            else {
+                $newRow = $("<tr>" +
+                    "<td><span class='rowIndex'></span><input type='hidden' name='[0].ID' class='hiddenID' /></td>" +
+                    "<td>" +
+                        "<select name='[0].Target' class='targetSelect'>" +
+                            "<option value=''>Chọn chỉ tiêu</option>" +
+                        "</select>" +
+                        "<input type='hidden' name='[0].MandalaLv' class='hiddenMandalaLv' />" +
+                    "</td>" +
+                    "<td><input type='date' name='[0].Deadline' class='form-control' /></td>" +
+                    "<td><input type='checkbox' name='[0].Status' /></td>" +
+                    "<td><input type='text' name='[0].Action' class='form-control' /></td>" +
+                    "<td><input type='text' name='[0].Result' class='form-control' /></td>" +
+                    "<td><input type='text' name='[0].Person' class='form-control' /></td>" +
+                "</tr>");
+                $templateRow = $newRow.clone();
+            }
+            $newRow.find("input, select, textarea").each(function() {
+                var $input = $(this), name = $input.attr("name");
+                if (name) { name = name.replace(/\[\d+\]/, "[" + i + "]"); $input.attr("name", name); }
+            });
+            setRowData($newRow, tableState[i]);
+            $tbody.append($newRow);
+        }
+        autoSortTable();
+    }
+
+    // Hàm tự động sắp xếp bảng theo thứ tự target và Deadline
+    function autoSortTable() {
+        var $tbody = $("#excelTable tbody");
+        var rows = $tbody.find("tr").get();
+        rows.sort(function(a, b) {
+            var lvA = $(a).find("input.hiddenMandalaLv").val(), lvB = $(b).find("input.hiddenMandalaLv").val();
+            var indexA = levelOrder.indexOf(lvA), indexB = levelOrder.indexOf(lvB);
+            if (indexA === -1) indexA = Number.MAX_SAFE_INTEGER;
+            if (indexB === -1) indexB = Number.MAX_SAFE_INTEGER;
+            if (indexA !== indexB) { return indexA - indexB; }
+            else {
+                var deadlineA = $(a).find("input[type='date']").val(), deadlineB = $(b).find("input[type='date']").val();
+                var dateA = deadlineA ? new Date(deadlineA) : new Date(8640000000000000);
+                var dateB = deadlineB ? new Date(deadlineB) : new Date(8640000000000000);
+                return dateA - dateB;
+            }
+        });
+        $.each(rows, function(index, row) {
+            $(row).find("td:first-child span.rowIndex").text(index + 1);
+            $tbody.append(row);
+        });
+    }
+
+    // Lưu trạng thái vào undoHistory
+    function pushState() {
+        var currentState = JSON.stringify(getCompleteState());
+        if (undoHistory.length === 0 || undoHistory[undoHistory.length - 1] !== currentState) {
+            undoHistory.push(currentState); redoHistory = [];
+        }
+    }
+
+    function undo() {
+        if (undoHistory.length > 1) {
+            redoHistory.push(undoHistory.pop());
+            var prevState = JSON.parse(undoHistory[undoHistory.length - 1]);
+            setFormState(prevState);
+        } else { alert("Không còn bước Undo!"); }
+    }
+
+    function redo() {
+        if (redoHistory.length > 0) {
+            var nextState = JSON.parse(redoHistory.pop());
+            undoHistory.push(JSON.stringify(nextState));
+            setFormState(nextState);
+        } else { alert("Không còn bước Redo!"); }
+    }
+
+// Hàm kiểm tra MandalaLv có thuộc nhóm được chọn hay không
+function isInGroup(mandalaLv, group) {
+    switch (group) {
+        case "M1": 
+            return mandalaLv >= 1 && mandalaLv <= 9;
+        case "M2": 
+            return mandalaLv === 2 || (mandalaLv >= 10 && mandalaLv <= 17);
+        case "M3": 
+            return mandalaLv === 3 || (mandalaLv >= 18 && mandalaLv <= 25);
+        case "M4": 
+            return mandalaLv === 4 || (mandalaLv >= 26 && mandalaLv <= 33);
+        case "M5": 
+            return mandalaLv === 5 || (mandalaLv >= 34 && mandalaLv <= 41);
+        case "M6": 
+            return mandalaLv === 6 || (mandalaLv >= 42 && mandalaLv <= 49);
+        case "M7": 
+            return mandalaLv === 7 || (mandalaLv >= 50 && mandalaLv <= 57);
+        case "M8": 
+            return mandalaLv === 8 || (mandalaLv >= 58 && mandalaLv <= 65);
+        case "M9": 
+            return mandalaLv === 9 || (mandalaLv >= 66 && mandalaLv <= 73);
+        default:
+            return false;
+    }
+}
+
+function search() {
+    var criteria = $("#criteria").val().trim().toLowerCase();
+    var startDate = $("#startDate").val();
+    var endDate = $("#endDate").val();
+    var assignee = $("#assignee").val().trim().toLowerCase();
+    var selectedMuctieus = [];
+    $("input[name='muctieu']:checked").each(function() {
+        selectedMuctieus.push($(this).val());
+    });
+
+    $("#excelTable tbody tr").each(function() {
+        var $row = $(this);
+        var targetText = $row.find("select.targetSelect option:selected").text().toLowerCase();
+        var rowDeadline = $row.find("input[type='date']").val();
+        var rowAssignee = $row.find("input[name$='.Person']").val().toLowerCase();
+        // Lấy giá trị MandalaLv từ input ẩn và chuyển về số
+        var hiddenMandalaLvVal = $row.find("input.hiddenMandalaLv").val();
+        var mandalaLv = parseInt(hiddenMandalaLvVal, 10);
+
+        var showRow = true;
+
+        // Lọc theo chỉ tiêu nếu có nhập
+        if (criteria && targetText.indexOf(criteria) === -1) {
+            showRow = false;
+        }
+
+        // Lọc theo nhóm Mục Tiêu dựa trên MandalaLv
+        if (selectedMuctieus.length > 0) {
+            var groupMatch = false;
+            selectedMuctieus.forEach(function(group) {
+                if (isInGroup(mandalaLv, group)) {
+                    groupMatch = true;
+                }
+            });
+            if (!groupMatch) {
+                showRow = false;
+            }
+        }
+
+        // Lọc theo Deadline bắt đầu và kết thúc
+        if (startDate && rowDeadline < startDate) {
+            showRow = false;
+        }
+        if (endDate && rowDeadline > endDate) {
+            showRow = false;
+        }
+
+        // Lọc theo Người thực hiện
+        if (assignee && rowAssignee.indexOf(assignee) === -1) {
+            showRow = false;
+        }
+
+        showRow ? $row.show() : $row.hide();
+    });
+}
+
+    // --- Các chức năng khác ---
+    function editMandalaName() {
+        var nameSpan = document.getElementById("mandalaNameText");
+        var editBtn = document.getElementById("editMandalaNameBtn");
+        if (editBtn.textContent.trim() === "Edit") {
+            var currentName = nameSpan.textContent.trim();
+            nameSpan.innerHTML = '<input type="text" id="mandalaNameInput" value="' + currentName + '" style="font-size:2.5rem; border:none; background:transparent; color:inherit;" />';
+            editBtn.textContent = "Save";
+        } else {
+            var nameInput = document.getElementById("mandalaNameInput");
+            var newName = nameInput.value;
+            nameSpan.textContent = newName;
+            editBtn.textContent = "Edit";
+            updateMandalaName(newName);
+        }
+    }
+
+    function updateMandalaName(newName) {
+        var mandalaId = $("#mandalaId").val();
+        $.ajax({
+            type: "POST",
+            url: "/Table/UpdateMandalaName",
+            data: { id: mandalaId, name: newName },
+            traditional: true,
+            success: function(response) { alert(response.message); },
+            error: function(err) { alert("Error updating Mandala Name!"); console.error(err); }
+        });
+    }
+
+    function saveData() {
+        var mandalaId = $("#mandalaId").val();
+        var details = getFormState();
+        console.log("Details:", details);
+        console.log("Deleted IDs:", deletedIds);
+        $.ajax({
+            type: "POST",
+            url: "/Table/Save",
+            data: JSON.stringify({ mandalaId: mandalaId, details: details, deletedIds: deletedIds }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(response) { alert(response.message); deletedIds = []; window.location.reload(); },
+            error: function(err) { alert("Error saving data!"); console.error(err); }
+        });
+    }
+
+    function addRow() {
+        var rowCount = $("#excelTable tbody tr").length;
+        var $newRow = $templateRow.clone();
+        $newRow.find("input, select, textarea").each(function() {
+            var $input = $(this);
+            var name = $input.attr("name");
+            if (name) { name = name.replace(/\[\d+\]/, "[" + rowCount + "]"); $input.attr("name", name); }
+        });
+        $newRow.find("input.hiddenID").val("");
+        $newRow.find("select.targetSelect").val("");
+        $newRow.find("input.hiddenMandalaLv").val("");
+        $newRow.find("input").not(".hiddenID").each(function() { $(this).val("").prop("checked", false); });
+        $("#excelTable tbody").append($newRow);
+        pushState();
+        autoSortTable();
+    }
+
+    function deleteRows() {
+        var $selectedRows = $("#excelTable tbody tr.table-active");
+        if ($selectedRows.length > 0) {
+            $selectedRows.each(function() {
+                var idVal = $(this).find("input.hiddenID").val();
+                if (idVal && idVal != 0) { deletedIds.push(idVal); }
+            });
+            $selectedRows.remove();
+            pushState();
+            autoSortTable();
+        } else { alert("Không có hàng nào được chọn để xóa!"); }
+    }
+
+    // Xử lý click chọn hàng (cho phép chọn nhiều hàng với phím Ctrl)
+    $("#excelTable tbody").on("click", "tr td:first-child", function(e) {
+        if (e.ctrlKey) { $(this).closest("tr").toggleClass("table-active"); }
+        else { $("#excelTable tbody tr").removeClass("table-active"); $(this).closest("tr").addClass("table-active"); }
+    });
+
+    $(document).ready(function() {
+        if ($("#excelTable tbody tr").length > 0) { $templateRow = $("#excelTable tbody tr").first().clone(); }
+        else {
+            $templateRow = $("<tr>" +
+                "<td><span class='rowIndex'></span><input type='hidden' name='[0].ID' class='hiddenID' /></td>" +
+                "<td>" +
+                    "<select name='[0].Target' class='targetSelect'>" +
+                        "<option value=''>Chọn chỉ tiêu</option>" +
+                    "</select>" +
+                    "<input type='hidden' name='[0].MandalaLv' class='hiddenMandalaLv' />" +
+                "</td>" +
+                "<td><input type='date' name='[0].Deadline' class='form-control' /></td>" +
+                "<td><input type='checkbox' name='[0].Status' /></td>" +
+                "<td><input type='text' name='[0].Action' class='form-control' /></td>" +
+                "<td><input type='text' name='[0].Result' class='form-control' /></td>" +
+                "<td><input type='text' name='[0].Person' class='form-control' /></td>" +
+            "</tr>");
+            $("#excelTable tbody").append($templateRow);
+        }
+        pushState();
+        $("#excelTable select.targetSelect:first option").each(function() {
+            var val = $(this).val();
+            if (val && val !== "Chọn chỉ tiêu") { levelOrder.push(val); }
+        });
+        $("#excelForm").on("input change", "input, select, textarea", debounce(function() { pushState(); autoSortTable(); }, 1000));
+        $("#excelTable").on("change", "select.targetSelect", function(){
+            var selectedTarget = $(this).val();
+            $(this).closest("tr").find("input.hiddenMandalaLv").val(selectedTarget);
+            pushState();
+            autoSortTable();
+        });
+    });
+
+    // --- Xử lý popup cho Mục Tiêu ---
+    const muctieuSelector = document.getElementById("muctieuSelector");
+    const muctieuPopup = document.getElementById("muctieuPopup");
+    const selectedMuctieuText = document.getElementById("selectedMuctieuText");
+
+    muctieuSelector.addEventListener("click", function(event) {
+        event.stopPropagation();
+        muctieuPopup.classList.toggle("show");
+    });
+
+    document.addEventListener("click", function(event) {
+        if (!muctieuSelector.contains(event.target)) { muctieuPopup.classList.remove("show"); }
+    });
+
+    function closeMuctieuPopup() {
+        muctieuPopup.classList.remove("show");
+        let selectedMuctieus = [];
+        document.querySelectorAll("input[name='muctieu']:checked").forEach((checkbox) => { selectedMuctieus.push(checkbox.value); });
+        selectedMuctieuText.innerText = selectedMuctieus.length > 0 ? selectedMuctieus.join(", ") : "Chọn Mục Tiêu";
+    }
+
+    // Khi ngày bắt đầu thay đổi, cập nhật thuộc tính min cho ngày kết thúc
+    document.getElementById("startDate").addEventListener("change", function(){
+        const startDateValue = this.value;
+        document.getElementById("endDate").min = startDateValue;
+        const endDateInput = document.getElementById("endDate");
+        if (endDateInput.value && endDateInput.value < startDateValue) { endDateInput.value = ""; }
+    });
+
+    // --- Thêm xử lý: Khi click vào filter-item thì thực hiện chức năng filter ngay lập tức ---
+    $(document).ready(function(){
+        $(".filter-item").on("click", function(e) {
+            // Nếu click vào element không phải input, thực hiện search()
+            if(e.target.tagName.toLowerCase() !== "input") {
+                search();
+            }
+        });
+    });
+</script>

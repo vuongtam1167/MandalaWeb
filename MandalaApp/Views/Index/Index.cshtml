@@ -1,0 +1,212 @@
+﻿@model IEnumerable<MandalaApp.Models.MandalaHome>
+
+@{
+    ViewData["Title"] = "MANDALA - HOME";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    /* Custom style cho hàng được chọn */
+    #fileTable tr.table-active {
+        background-color: #e2e2e2 !important;
+    }
+
+    .table-responsive {
+        min-height: 400px;
+    }
+
+    #fileTable {
+        table-layout: fixed;
+        width: 100%;
+    }
+
+        #fileTable thead th {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+            #fileTable thead th:nth-child(1) {
+                width: 150px;
+            }
+
+            #fileTable thead th:nth-child(2) {
+                width: 200px;
+            }
+
+            #fileTable thead th:nth-child(3) {
+                width: 150px;
+            }
+</style>
+
+<div id="content-wrapper" class="d-flex flex-column">
+    <!-- Main Content -->
+    <div id="content">
+        <nav class="navbar navbar-expand navbar-light bg-white topbar static-top shadow px-3">
+            <!-- Search -->
+            <input type="text" id="search" placeholder="Tìm kiếm..." onkeyup="searchFiles()" class="form-control">
+            <!-- User Dropdown -->
+            <div class="nav-item dropdown no-arrow ml-auto">
+                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">@User.FindFirst("FullName")?.Value</span>
+                    <img class="img-profile rounded-circle" src="img/undraw_profile.svg" width="40" height="40">
+                </a>
+                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                    <a class="dropdown-item" href="/Profile/Profile">
+                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Profile
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <!-- Khi nhấn Logout sẽ mở modal -->
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </nav>
+        <div class="container-fluid">
+            <!-- Content Row -->
+            <div class="row mt-4">
+                <!-- Mandala Chart (cột bên trái) -->
+                <div class="col-xl-8 col-lg-7">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Mandala Chart</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive mt-3">
+                                <table id="fileTable" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th onclick="sortTable(0)">Tên</th>
+                                            <th onclick="sortTable(1)">Sửa đổi lần cuối</th>
+                                            <th>Người sửa</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var mandala in Model)
+                                        {
+                                            <tr data-id="@mandala.MandalaID" onclick="selectFile(this)" ondblclick="navigateToChart(this)">
+                                                <td>@mandala.NameMandala</td>
+                                                <td>
+                                                    @(
+                                                        mandala.ModifiedDate.HasValue
+                                                        ? mandala.ModifiedDate.Value.ToString("dd 'Tháng' M, yyyy")
+                                                        : "Chưa xác định"
+                                                        )
+                                                </td>
+                                                <td>@mandala.NameUser</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Khung xem chi tiết (cột bên phải) -->
+                <div class="col-xl-4 col-lg-5">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Chi tiết</h6>
+                        </div>
+                        <div class="card-body" id="detailContainer">
+                            <p>Chọn một file từ Mandala Chart để xem chi tiết.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Logout Modal -->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="logoutModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Select "Logout" below if you are ready to end your current session.
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <form method="post" action="@Url.Action("Logout", "Account")">
+                    <button class="btn btn-primary" type="submit">Logout</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Hàm xử lý tìm kiếm
+    function searchFiles() {
+        let input = document.getElementById("search").value.toLowerCase();
+        let tbody = document.querySelector("#fileTable tbody");
+        let rows = tbody.querySelectorAll("tr");
+
+        rows.forEach(row => {
+            let name = row.cells[0].textContent.toLowerCase();
+            row.style.display = name.includes(input) ? "" : "none";
+        });
+    }
+
+    // Hàm chuyển đổi chuỗi ngày tháng thành đối tượng Date
+    function parseDate(dateStr) {
+        let parts = dateStr.match(/(\d{1,2}) Tháng (\d{1,2}), (\d{4})/);
+        return parts ? new Date(parts[3], parts[2] - 1, parts[1]) : new Date(0);
+    }
+
+    let sortDirections = [true, true];
+
+    // Hàm sắp xếp bảng theo cột
+    function sortTable(columnIndex) {
+        let table = document.getElementById("fileTable");
+        let tbody = table.querySelector("tbody");
+        let rows = Array.from(tbody.querySelectorAll("tr"));
+        let isDateColumn = columnIndex === 1;
+        let ascending = sortDirections[columnIndex];
+
+        let sortedRows = rows.sort((a, b) => {
+            let valA = a.cells[columnIndex].textContent;
+            let valB = b.cells[columnIndex].textContent;
+
+            return isDateColumn
+                ? (parseDate(valA) - parseDate(valB)) * (ascending ? 1 : -1)
+                : valA.localeCompare(valB, 'vi', { numeric: true }) * (ascending ? 1 : -1);
+        });
+
+        tbody.innerHTML = "";
+        sortedRows.forEach(row => tbody.appendChild(row));
+
+        sortDirections[columnIndex] = !ascending;
+    }
+
+    // Hàm chọn file và hiển thị chi tiết
+    function selectFile(row) {
+        let rows = document.querySelectorAll("#fileTable tbody tr");
+        rows.forEach(function (r) {
+            r.classList.remove("table-active");
+        });
+        row.classList.add("table-active");
+        let cells = row.getElementsByTagName("td");
+        let fileName = cells[0].textContent;
+        let modifiedDate = cells[1].textContent;
+        let owner = cells[2].textContent;
+        let detailContainer = document.getElementById("detailContainer");
+        detailContainer.innerHTML = "<h5>" + fileName + "</h5>" +
+            "<p><strong>Sửa đổi:</strong> " + modifiedDate + "</p>" +
+            "<p><strong>Người sửa:</strong> " + owner + "</p>";
+    }
+
+    // Hàm chuyển hướng sang trang Chart với id được lấy từ thuộc tính data-id của dòng
+    function navigateToChart(row) {
+        var id = row.getAttribute("data-id");
+        window.location.href = '@Url.Action("Chart", "Chart")' + '?id=' + id;
+    }
+</script>

@@ -1,0 +1,261 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - Mandala App</title>
+    <link rel="stylesheet" href="~/css/sb-admin-2.min.css" />
+    <!-- Các file CSS khác -->
+    <style>
+        @@keyframes rotatePulse {
+            0%
+
+        {
+            transform: rotate(0deg) scale(1);
+        }
+
+        25% {
+            transform: rotate(90deg) scale(1.05);
+        }
+
+        50% {
+            transform: rotate(180deg) scale(1);
+        }
+
+        75% {
+            transform: rotate(270deg) scale(1.05);
+        }
+
+        100% {
+            transform: rotate(360deg) scale(1);
+        }
+
+        }
+
+        .navbar-nav .mandala-icon {
+            width: 50px;
+            height: 50px;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+            animation: rotatePulse 20s ease-in-out infinite;
+        }
+
+        button.mandala-btn {
+            padding: 12px 24px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            color: #333;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s, transform 0.3s;
+            display: block;
+            margin: 20px auto;
+        }
+
+        button.mandala-btn:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff9a9e 100%);
+        }
+
+        .icon-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .icon-container svg {
+            width: 40px;
+            height: 40px;
+            fill: #ccc;
+            transition: fill 0.2s;
+        }
+
+        .icon-container:hover svg {
+            fill: #fff;
+        }
+
+        .topbar-icons {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .icon-button {
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .icon-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
+            color: #00f2fe;
+         }
+
+        .icon {
+            width: 24px;
+            height: 24px;
+            fill: #ffffff;
+            margin-right: 8px;
+            transition: fill 0.2s ease;
+        }
+
+        .icon-button:hover .icon {
+            fill: #00f2fe;
+        }
+    </style>
+</head>
+<body id="page-top">
+    <!-- Sidebar -->
+    <div id="wrapper">
+        <!-- Chèn HTML của sidebar ở đây -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled" id="accordionSidebar">
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/Index/Index">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="mandala-icon">
+                        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#81d4fa; stop-opacity:1" />
+                                    <stop offset="50%" style="stop-color:#4fc3f7; stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#01579b; stop-opacity:1" />
+                                </linearGradient>
+                                <radialGradient id="grad2" cx="50%" cy="50%" r="50%">
+                                    <stop offset="0%" style="stop-color:#ffffff; stop-opacity:0.9" />
+                                    <stop offset="100%" style="stop-color:#81d4fa; stop-opacity:0.5" />
+                                </radialGradient>
+                                <radialGradient id="gradCenter" cx="50%" cy="50%" r="50%">
+                                    <stop offset="0%" style="stop-color:#ffffff; stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#ffcc00; stop-opacity:1" />
+                                </radialGradient>
+                                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                                    <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur" />
+                                        <feMergeNode in="SourceGraphic" />
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                            <circle cx="100" cy="100" r="40" fill="url(#gradCenter)" stroke="#b8860b" stroke-width="4"
+                                    filter="url(#glow)" />
+                            <circle cx="100" cy="100" r="12" fill="#ffffff" opacity="0.8" />
+                            <g stroke-width="2">
+                                <circle cx="100" cy="100" r="45" stroke="#01579b" fill="url(#grad2)" />
+                                <circle cx="100" cy="100" r="65" stroke="#0288d1" fill="url(#grad2)" />
+                                <circle cx="100" cy="100" r="85" stroke="#81d4fa" fill="url(#grad2)" />
+                            </g>
+                            <g stroke-width="2">
+                                <path d="M100 15 Q140 40 100 100 Q60 40 100 15" stroke="#002f6c" fill="#002f6c" />
+                                <path d="M185 100 Q150 140 100 100 Q150 60 185 100" stroke="#01579b" fill="#01579b" />
+                                <path d="M100 185 Q140 150 100 100 Q60 150 100 185" stroke="#0277bd" fill="#0277bd" />
+                                <path d="M15 100 Q50 140 100 100 Q50 60 15 100" stroke="#4fc3f7" fill="#4fc3f7" />
+                            </g>
+                            <g stroke-width="2">
+                                <path d="M45 45 Q75 20 100 45 Q125 20 155 45" stroke="#0288d1" fill="none" />
+                                <path d="M45 155 Q75 180 100 155 Q125 180 155 155" stroke="#81d4fa" fill="none" />
+                                <path d="M45 45 Q20 75 45 100 Q20 125 45 155" stroke="#b3e5fc" fill="none" />
+                                <path d="M155 45 Q180 75 155 100 Q180 125 155 155" stroke="#ffffff" fill="none" />
+                            </g>
+                            <g transform="rotate(45, 100, 100)" stroke-width="2">
+                                <path d="M100 15 Q140 40 100 100 Q60 40 100 15" stroke="#003366" fill="#003366" />
+                                <path d="M185 100 Q150 140 100 100 Q150 60 185 100" stroke="#01579b" fill="#01579b" />
+                                <path d="M100 185 Q140 150 100 100 Q60 150 100 185" stroke="#0277bd" fill="#0277bd" />
+                                <path d="M15 100 Q50 140 100 100 Q50 60 15 100" stroke="#4fc3f7" fill="#4fc3f7" />
+                            </g>
+                            <circle cx="100" cy="100" r="95" fill="none" stroke="url(#grad1)" stroke-width="8" />
+                        </svg>
+                    </i>
+                </div>
+            </a>
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item">
+                <!-- Nội dung menu dashboard -->
+            </li>
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                MANDALA
+            </div>
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="/Index/Index">
+                    <div class="icon-container" id="iconHome">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 3L4 10h2v8h4v-4h4v4h4v-8h2z" />
+                        </svg>
+                    </div>
+                    <span>Home</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Custom Components:</h6>
+                        <a class="collapse-item" href="buttons.html">Buttons</a>
+                        <a class="collapse-item" href="cards.html">Cards</a>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="/CreateMandala/CreateMandala">
+                    <div class="icon-container" id="iconNew">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                        </svg>
+                    </div>
+                    <span>New</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Custom Components:</h6>
+                        <a class="collapse-item" href="buttons.html">Buttons</a>
+                        <a class="collapse-item" href="cards.html">Cards</a>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#">
+                    <div class="icon-container" id="iconOpen">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M3 7h4l2 2h12v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z" />
+                        </svg>
+                    </div>
+                    <span>Open</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Custom Components:</h6>
+                        <a class="collapse-item" href="buttons.html">Buttons</a>
+                        <a class="collapse-item" href="cards.html">Cards</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        @RenderBody()
+    </div>
+    <script src="~/vendor/jquery/jquery.min.js"></script>
+    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function navigateToHome() {
+            window.location.href = '@Url.Action("Index", "Index")';
+        }
+    </script>
+    <!-- Các file JS khác -->
+</body>
+</html>
