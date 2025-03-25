@@ -20,10 +20,7 @@ namespace MandalaApp.Controllers
 
         public IActionResult Table(long mandalaId)
         {
-            // Lấy ID của user hiện tại từ Claims
             long currentUserId = Convert.ToInt64(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-
-            // Kiểm tra quyền truy cập: chỉ cho phép nếu user tạo ra hoặc Mandala được chia sẻ cho user đó.
             bool accessible = _repository.IsMandalaAccessible(currentUserId, mandalaId);
             if (!accessible)
             {
@@ -31,10 +28,22 @@ namespace MandalaApp.Controllers
             }
 
             var details = _repository.GetMandalaDetailsByMandalaId(mandalaId);
+            // Nếu danh sách rỗng thì thêm một đối tượng trống để View luôn có ít nhất 1 dòng
+            if (details == null || details.Count == 0)
+            {
+                details = new List<MandalaDetail>
+        {
+            new MandalaDetail() // Tạo 1 detail trống
+        };
+            }
+
             var targetOptions = _repository.GetTargetOptions(mandalaId);
+            string avatar = _repository.GetAvatarPathByUserId(currentUserId);
+            ViewBag.Avatar = avatar;
             ViewBag.MandalaName = _repository.GetMandalaNameById(mandalaId);
             ViewBag.Id = mandalaId;
             ViewBag.TargetOptions = targetOptions;
+
             return View(details);
         }
 

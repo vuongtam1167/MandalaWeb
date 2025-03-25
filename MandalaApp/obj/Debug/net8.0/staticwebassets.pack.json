@@ -17,6 +17,18 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\wwwroot\\images\\avatars\\1218cdcf-9649-467c-984c-7450e3f1d310_Screenshot 2025-02-27 154654.png",
+      "PackagePath": "staticwebassets\\images\\avatars\\1218cdcf-9649-467c-984c-7450e3f1d310_Screenshot 2025-02-27 154654.png"
+    },
+    {
+      "Id": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\wwwroot\\images\\avatars\\4d5c77d9-9ebc-47bf-8dd3-3beba8804dbb_Screenshot 2025-02-28 143503.png",
+      "PackagePath": "staticwebassets\\images\\avatars\\4d5c77d9-9ebc-47bf-8dd3-3beba8804dbb_Screenshot 2025-02-28 143503.png"
+    },
+    {
+      "Id": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\wwwroot\\images\\avatars\\temp\\a249b52b-7618-49b9-9125-fc57f231cb3f_Screenshot 2025-02-27 154654.png",
+      "PackagePath": "staticwebassets\\images\\avatars\\temp\\a249b52b-7618-49b9-9125-fc57f231cb3f_Screenshot 2025-02-27 154654.png"
+    },
+    {
       "Id": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\wwwroot\\js\\demo\\chart-area-demo.js",
       "PackagePath": "staticwebassets\\js\\demo\\chart-area-demo.js"
     },
@@ -31,6 +43,14 @@
     {
       "Id": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\wwwroot\\js\\demo\\datatables-demo.js",
       "PackagePath": "staticwebassets\\js\\demo\\datatables-demo.js"
+    },
+    {
+      "Id": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\wwwroot\\js\\mandalaChart.js",
+      "PackagePath": "staticwebassets\\js\\mandalaChart.js"
+    },
+    {
+      "Id": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\wwwroot\\js\\mandalaTable.js",
+      "PackagePath": "staticwebassets\\js\\mandalaTable.js"
     },
     {
       "Id": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\wwwroot\\js\\sb-admin-2.js",

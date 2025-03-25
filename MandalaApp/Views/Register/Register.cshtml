@@ -28,6 +28,7 @@
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
                             </div>
+
                             @using (Html.BeginForm("Register", "Register", FormMethod.Post, new { @class = "user" }))
                             {
                                 <div class="form-group row">
@@ -51,12 +52,13 @@
                                     Register Account
                                 </button>
                                 <hr />
-                                <a href="@Url.Action("RegisterWithGoogle", "Account")" class="btn btn-google btn-user btn-block">
-                                    <i class="fab fa-google fa-fw"></i> Register with Google
-                                </a>
-                                <a href="@Url.Action("RegisterWithFacebook", "Account")" class="btn btn-facebook btn-user btn-block">
-                                    <i class="fab fa-facebook-f fa-fw"></i> Register with Facebook
-                                </a>
+                                <!-- Hiển thị thông báo lỗi nếu có -->
+                                @if (ViewBag.ErrorMessage != null)
+                                {
+                                    <div class="alert alert-danger" role="alert">
+                                        @ViewBag.ErrorMessage
+                                    </div>
+                                }
                             }
                             <hr />
                             <div class="text-center">

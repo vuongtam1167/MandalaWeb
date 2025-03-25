@@ -4,6 +4,9 @@
     ViewData["Title"] = "MANDALA - HOME";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+</head>
 <style>
     /* Custom style cho hàng được chọn */
     #fileTable tr.table-active {
@@ -24,7 +27,7 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
-
+            /* Chỉnh độ rộng cột */
             #fileTable thead th:nth-child(1) {
                 width: 150px;
             }
@@ -35,6 +38,37 @@
 
             #fileTable thead th:nth-child(3) {
                 width: 150px;
+            }
+
+    .my-dropdown-list {
+        position: absolute;
+        top: 100%; /* Xuất hiện ngay dưới ô input */
+        left: 0;
+        width: 100%; /* Khớp độ rộng của input */
+        max-height: 300px; /* Giới hạn chiều cao nếu danh sách dài */
+        overflow-y: auto;
+        background: #fff;
+        border: 1px solid #ccc;
+        border-top: none;
+        border-radius: 0 0 5px 5px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+        display: none; /* Ẩn mặc định */
+        z-index: 9999;
+    }
+
+        .my-dropdown-list.show {
+            display: block;
+        }
+
+        .my-dropdown-list a {
+            display: block;
+            padding: 8px 12px;
+            color: #333;
+            text-decoration: none;
+        }
+
+            .my-dropdown-list a:hover {
+                background-color: #f8f9fa; /* hoặc màu tuỳ ý */
             }
 </style>
 
@@ -49,20 +83,20 @@
                 <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="mr-2 d-none d-lg-inline text-gray-600 small">@User.FindFirst("FullName")?.Value</span>
-                    <img class="img-profile rounded-circle" src="img/undraw_profile.svg" width="40" height="40">
+                    <img class="img-profile rounded-circle" src="@ViewBag.Avatar" style=" width: 42px;height: 42px;">
                 </a>
                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                     <a class="dropdown-item" href="/Profile/Profile">
                         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Profile
                     </a>
                     <div class="dropdown-divider"></div>
-                    <!-- Khi nhấn Logout sẽ mở modal -->
                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Logout
                     </a>
                 </div>
             </div>
         </nav>
+
         <div class="container-fluid">
             <!-- Content Row -->
             <div class="row mt-4">
@@ -94,7 +128,20 @@
                                                         : "Chưa xác định"
                                                         )
                                                 </td>
-                                                <td>@mandala.NameUser</td>
+                                                <td>
+                                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                        <span>@mandala.NameUser</span>
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-link" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                <i class="fas fa-ellipsis-v"></i>
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                <a class="dropdown-item" href="#" onclick="openShareModal(event, '@mandala.MandalaID')">Share</a>
+                                                                <a class="dropdown-item text-danger" href="#" onclick="deleteFile(event, '@mandala.MandalaID')">Delete</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         }
                                     </tbody>
@@ -115,6 +162,32 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Share Mandala -->
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="shareModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="shareModalLabel">Chia sẻ Mandala</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Ô tìm kiếm User theo Name với dropdown kết quả -->
+                <div class="my-dropdown" style="position: relative;">
+                    <input type="text" id="userSearch" class="form-control" placeholder="Tìm kiếm User..." onkeyup="searchUser()" />
+                    <div id="userDropdownSearch" class="my-dropdown-list">
+                        <!-- Kết quả tìm kiếm sẽ được JS chèn vào đây -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>
@@ -144,12 +217,14 @@
 </div>
 
 <script>
-    // Hàm xử lý tìm kiếm
+    // Global biến lưu MandalaID hiện hành khi share
+    var currentMandalaId = null;
+
+    // Hàm xử lý tìm kiếm trong bảng Mandala
     function searchFiles() {
         let input = document.getElementById("search").value.toLowerCase();
         let tbody = document.querySelector("#fileTable tbody");
         let rows = tbody.querySelectorAll("tr");
-
         rows.forEach(row => {
             let name = row.cells[0].textContent.toLowerCase();
             row.style.display = name.includes(input) ? "" : "none";
@@ -171,42 +246,152 @@
         let rows = Array.from(tbody.querySelectorAll("tr"));
         let isDateColumn = columnIndex === 1;
         let ascending = sortDirections[columnIndex];
-
         let sortedRows = rows.sort((a, b) => {
             let valA = a.cells[columnIndex].textContent;
             let valB = b.cells[columnIndex].textContent;
-
             return isDateColumn
                 ? (parseDate(valA) - parseDate(valB)) * (ascending ? 1 : -1)
                 : valA.localeCompare(valB, 'vi', { numeric: true }) * (ascending ? 1 : -1);
         });
-
         tbody.innerHTML = "";
         sortedRows.forEach(row => tbody.appendChild(row));
-
         sortDirections[columnIndex] = !ascending;
     }
 
     // Hàm chọn file và hiển thị chi tiết
     function selectFile(row) {
         let rows = document.querySelectorAll("#fileTable tbody tr");
-        rows.forEach(function (r) {
-            r.classList.remove("table-active");
-        });
+        rows.forEach(function (r) { r.classList.remove("table-active"); });
         row.classList.add("table-active");
         let cells = row.getElementsByTagName("td");
         let fileName = cells[0].textContent;
         let modifiedDate = cells[1].textContent;
-        let owner = cells[2].textContent;
+        let ownerSpan = cells[2].querySelector("span");
+        let owner = ownerSpan ? ownerSpan.textContent : "";
         let detailContainer = document.getElementById("detailContainer");
         detailContainer.innerHTML = "<h5>" + fileName + "</h5>" +
             "<p><strong>Sửa đổi:</strong> " + modifiedDate + "</p>" +
             "<p><strong>Người sửa:</strong> " + owner + "</p>";
     }
 
-    // Hàm chuyển hướng sang trang Chart với id được lấy từ thuộc tính data-id của dòng
+    // Hàm chuyển hướng sang trang Chart
     function navigateToChart(row) {
         var id = row.getAttribute("data-id");
         window.location.href = '@Url.Action("Chart", "Chart")' + '?id=' + id;
+    }
+
+    // Hàm mở modal Share
+    function openShareModal(e, mandalaId) {
+        e.stopPropagation(); // Ngăn sự kiện click lan ra
+        currentMandalaId = mandalaId; // Lưu MandalaID hiện hành
+        // Reset ô tìm kiếm
+        document.getElementById("userSearch").value = "";
+        // Mở modal Share
+        $("#shareModal").modal("show");
+    }
+
+    // Hàm tìm kiếm User theo Name (gọi AJAX)
+    function searchUser() {
+        const query = document.getElementById("userSearch").value.trim();
+        const dropdown = document.getElementById("userDropdownSearch");
+
+        if (!query) {
+            dropdown.innerHTML = "";
+            dropdown.classList.remove("show");
+            return;
+        }
+
+        fetch('@Url.Action("SearchUsers", "Index")?query=' + encodeURIComponent(query))
+            .then(response => response.json())
+            .then(data => {
+                dropdown.innerHTML = "";
+                if (!data || data.length === 0) {
+                    dropdown.classList.remove("show");
+                    return;
+                }
+
+                data.forEach(user => {
+                    // Tạo phần tử <a> đại diện cho mỗi user
+                    const a = document.createElement("a");
+                    a.href = "#";
+                    a.className = "dropdown-item d-flex align-items-center";
+
+                    // Ở đây, bạn có thể tuỳ biến hiển thị avatar + tên + email
+                    // Ví dụ: hiển thị avatar tròn, tên in đậm, email phía dưới
+                    a.innerHTML = `
+                        <img src="${user.avatar || '/img/default-avatar.png'}"
+                             class="rounded-circle mr-2"
+                             width="40" height="40"
+                             alt="Avatar" />
+                        <div>
+                            <div style="font-weight: 500;">${user.name}</div>
+                            <div style="font-size: 0.85rem; color: #666;">${user.email}</div>
+                        </div>
+                    `;
+
+                    // Bắt sự kiện click để share Mandala
+                    a.onclick = (e) => {
+                        e.preventDefault();
+                        shareMandalaWithUser(user.id);
+                    };
+
+                    dropdown.appendChild(a);
+                });
+
+                dropdown.classList.add("show");
+            })
+            .catch(err => {
+                console.error(err);
+                dropdown.classList.remove("show");
+            });
+    }
+
+    // Hàm gửi yêu cầu chia sẻ Mandala với một User cụ thể
+    function shareMandalaWithUser(sharedUserId) {
+        if (!currentMandalaId) return;
+        fetch('@Url.Action("Share", "Index")', {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                mandalaId: currentMandalaId,
+                sharedUserId: sharedUserId,
+                permission: "read" // hoặc bỏ qua nếu có default
+            })
+        })
+        .then(response => {
+            if (response.ok) {
+                alert("Chia sẻ Mandala thành công!");
+                $("#shareModal").modal("hide");
+            } else {
+                response.text().then(text => alert("Có lỗi xảy ra khi chia sẻ: " + text));
+            }
+        })
+        .catch(error => {
+            console.error("Lỗi chia sẻ:", error);
+            alert("Không thể chia sẻ Mandala!");
+        });
+    }
+
+    // Hàm Delete
+    function deleteFile(e, mandalaId) {
+        e.stopPropagation();
+        if (!confirm("Bạn có chắc chắn muốn xóa Mandala ID = " + mandalaId + "?")) {
+            return;
+        }
+        fetch('@Url.Action("Delete", "Index")' + '?mandalaId=' + mandalaId, {
+            method: 'POST'
+        })
+        .then(response => {
+            if (response.ok) {
+                alert("Đã xóa thành công!");
+                location.reload();
+            } else {
+                alert("Có lỗi xảy ra khi xóa!");    
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Không thể xóa!");
+        });
     }
 </script>

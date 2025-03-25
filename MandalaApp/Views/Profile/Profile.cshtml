@@ -190,11 +190,12 @@
     <div class="profile-card">
         <!-- Form chỉnh sửa profile -->
         <form method="post" action="@Url.Action("SaveProfile", "Profile")" enctype="multipart/form-data">
-            <!-- Input ẩn cho ID của user -->
+            <!-- Input ẩn cho ID và Avatar -->
             <input type="hidden" name="ID" value="@Model.ID" />
+            <input type="hidden" id="avatarValue" name="Avatar" value="@Model.Avatar" />
             <div class="profile-header">
-                <!-- Avatar: chọn file mới khi ở chế độ chỉnh sửa -->
-                <div class="profile-avatar" id="profileAvatar" style="background-image: url('@(Model.Avatar ?? "https://via.placeholder.com/150")');"></div>
+                <!-- Avatar: click chọn file khi chỉnh sửa -->
+                <div class="profile-avatar" id="profileAvatar" style="background-image: url('@(Model.Avatar ?? "https://via.placeholder.com/150")'); border: solid;"></div>
                 <div class="profile-info">
                     <h2>@Model.Name</h2>
                 </div>
@@ -226,20 +227,16 @@
                 <div class="detail-row">
                     <div class="label">Status:</div>
                     <div class="value">
-                        <!-- Checkbox được hiển thị trước -->
                         <input type="checkbox" id="statusCheckbox" name="Status" value="true" disabled @(Model.Status ? "checked='checked'" : "") />
-                        <!-- Input ẩn gửi false nếu checkbox không được chọn -->
                         <input type="hidden" name="Status" value="false" />
                     </div>
                 </div>
             </div>
-            <!-- Input ẩn lưu avatar (base64) -->
-            <input type="hidden" id="avatarValue" name="Avatar" value="@Model.Avatar" />
             <!-- Nút chuyển đổi chế độ -->
             <button type="button" id="editBtn" class="btn-edit">Chỉnh sửa thông tin</button>
             <input type="submit" id="saveBtn" class="btn-submit" value="Lưu thay đổi" />
-            <!-- Input file ẩn để chọn ảnh mới -->
-            <input type="file" id="avatarInput" style="display: none;" accept="image/*" />
+            <!-- Input file cho ảnh đại diện -->
+            <input type="file" id="avatarInput" name="avatarFile" style="display: none;" accept="image/*" />
         </form>
     </div>
 
@@ -278,21 +275,36 @@
     const saveBtn = document.getElementById("saveBtn");
     const avatarValue = document.getElementById("avatarValue");
 
-    // Khi ở chế độ chỉnh sửa, nhấn vào avatar để chọn ảnh mới
+    // Khi ở chế độ chỉnh sửa, click vào avatar sẽ mở hộp chọn file
     avatar.addEventListener("click", function() {
         if (isEditing) {
             avatarInput.click();
         }
     });
 
+    // Khi chọn file mới, upload file qua AJAX và lưu đường dẫn tạm vào hidden field
     avatarInput.addEventListener("change", function() {
         if (this.files && this.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                avatar.style.backgroundImage = "url('" + e.target.result + "')";
-                avatarValue.value = e.target.result;
-            }
-            reader.readAsDataURL(this.files[0]);
+            let formData = new FormData();
+            formData.append("avatarFile", this.files[0]);
+            fetch('@Url.Action("UploadAvatar", "Profile")', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Cập nhật preview ảnh và hidden field
+                    avatar.style.backgroundImage = "url('" + data.filePath + "')";
+                    avatarValue.value = data.filePath;
+                } else {
+                    alert("Upload thất bại: " + data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Có lỗi xảy ra khi upload ảnh.");
+            });
         }
     });
 
@@ -321,13 +333,12 @@
         }
     });
 
-    // Xử lý lưu mật khẩu bằng AJAX
+    // Xử lý lưu mật khẩu qua fetch (AJAX)
     document.getElementById("savePasswordBtn").addEventListener("click", function() {
         const oldPassword = document.getElementById("oldPassword").value.trim();
         const newPassword = document.getElementById("newPassword").value.trim();
         const confirmNewPassword = document.getElementById("confirmNewPassword").value.trim();
 
-        // Client-side validation (optional)
         if(newPassword.length < 8) {
             alert("Mật khẩu mới phải có ít nhất 8 ký tự.");
             return;
@@ -341,11 +352,10 @@
             return;
         }
 
-        // Sử dụng fetch để gửi AJAX request
         fetch('@Url.Action("ChangePassword", "Profile")', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 oldPassword: oldPassword,
@@ -357,7 +367,6 @@
         .then(data => {
             alert(data.message);
             if(data.success) {
-                // Xóa nội dung các trường mật khẩu
                 document.getElementById("oldPassword").value = "";
                 document.getElementById("newPassword").value = "";
                 document.getElementById("confirmNewPassword").value = "";
@@ -365,7 +374,7 @@
             }
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error("Error:", error);
             alert("Có lỗi xảy ra, vui lòng thử lại.");
         });
     });

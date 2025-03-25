@@ -36,6 +36,8 @@ namespace MandalaApp.Controllers
                 // Thiết lập ngày sửa và người sửa bằng giá trị của ngày tạo và người tạo
                 model.ModifiedDate = model.CreatedDate;
                 model.ModifiedUserID = model.CreatedUserID;
+                model.Status = true;
+                model.Class = 1;
 
                 // Lưu Mandala và lấy ID mới tạo (giả sử repository.InsertMandala trả về long)
                 long newMandalaId = _repository.InsertMandala(model);

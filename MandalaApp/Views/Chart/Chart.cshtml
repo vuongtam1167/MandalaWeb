@@ -1,4 +1,4 @@
-﻿@model MandalaApp.Models.MandalaChartViewModel
+﻿ @model MandalaApp.Models.MandalaChartViewModel
 
 @{
     ViewData["Title"] = "Chart";
@@ -15,16 +15,6 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-    }
-
-    /* Style cho icon và nền */
-    .navbar-nav .mandala-icon {
-        width: 50px;
-        height: 50px;
-        display: inline-block;
-        vertical-align: middle;
-        margin-right: 10px;
-        animation: rotatePulse 20s ease-in-out infinite;
     }
 
     .mandala-container {
@@ -78,14 +68,22 @@
             border: none;
             background: transparent;
             color: #fff;
-            resize: none;
-            overflow: hidden;
+            resize: vertical;
+            overflow: auto;
             white-space: pre-wrap;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
         }
 
             .cell textarea::-webkit-scrollbar {
                 display: none;
+            }
+            /* Cải thiện giao diện cho ô bị khóa */
+            .cell textarea:disabled {
+                background-color: #555;
+                color: #ccc;
+                border: 1px solid #444;
+                cursor: not-allowed;
+                opacity: 0.8;
             }
 
         .cell.red {
@@ -125,8 +123,8 @@
 
 <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
-        <nav class="navbar navbar-expand navbar-light bg-white topbar static-top shadow px-3">
-            <!-- Icon Buttons -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar fixed-top static-top shadow px-3" style="margin-left:104px">
+            <!-- Icon Buttons & Navbar -->
             <div class="d-flex align-items-center">
                 <button class="btn btn-outline-primary btn-sm mx-1" onclick="handleSave()">
                     <i class="fas fa-save"></i> Save
@@ -138,7 +136,6 @@
                     <i class="fas fa-redo"></i> Redo
                 </button>
             </div>
-
             <div class="mx-auto d-flex align-items-center justify-content-center">
                 <span id="mandalaNameText" class="text-primary font-weight-bold" style="font-size:2.5rem;">
                     @ViewBag.MandalaName
@@ -146,13 +143,11 @@
                 <input type="hidden" id="mandalaId" value="@ViewBag.Id" />
                 <button id="editMandalaNameBtn" class="btn btn-sm btn-outline-primary ml-2" onclick="editMandalaName()">Edit</button>
             </div>
-
-            <!-- User Dropdown -->
             <div class="nav-item dropdown no-arrow">
                 <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="mr-2 d-none d-lg-inline text-gray-600 small">@User.FindFirst("FullName")?.Value</span>
-                    <img class="img-profile rounded-circle" src="img/undraw_profile.svg" width="40" height="40">
+                    <img class="img-profile rounded-circle" src="@ViewBag.Avatar" style="width:42px;height:42px;">
                 </a>
                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                     <a class="dropdown-item" href="/Profile/Profile">
@@ -168,7 +163,14 @@
         <div class="mandala-container">
             <div id="mandala-grid" class="mandala-grid"></div>
             <div class="button-group">
-                <button class="mandala-btn" onclick="toggleGrid()">Toggle Grid</button>
+                @if (ViewBag.MandalaClass == 1)
+                {
+                    <button class="mandala-btn" onclick="upgradeClass()">Upgrade to 9x9</button>
+                }
+                else
+                {
+                    <button class="mandala-btn" onclick="toggleGrid()">Toggle Grid</button>
+                }
                 <button class="mandala-btn" onclick="viewDetail()">View Detail</button>
             </div>
         </div>
@@ -198,226 +200,10 @@
     </div>
 </div>
 
-<script>
-    // Biến lưu trạng thái hiện tại của grid (cho cả 3x3 và 9x9)
-    let placeholders3 = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Placeholders3));
-    let placeholders9 = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Placeholders9));
-
-    let isGrid3x3 = true; // Mặc định là 3x3
-
-    // Các mảng thứ tự MandalaLv cho grid 3x3 và 9x9
-    const orderedPositions3x3 = [7, 4, 8, 3, 1, 5, 6, 2, 9];
-    const orderedPositions9 = [
-        55, 52, 56, 31, 28, 32, 63, 60, 64,
-        51, 7, 53, 27, 4, 29, 59, 8, 61,
-        54, 50, 57, 30, 26, 33, 62, 58, 65,
-        23, 20, 24, 7, 4, 8, 39, 36, 40,
-        19, 3, 21, 3, 1, 5, 35, 5, 37,
-        22, 18, 25, 6, 2, 9, 38, 34, 41,
-        47, 44, 48, 15, 12, 16, 71, 68, 72,
-        43, 6, 45, 11, 2, 13, 67, 9, 69,
-        46, 42, 49, 14, 10, 17, 70, 66, 73
-    ];
-
-    // Undo/Redo History (lưu cả placeholders3 và placeholders9)
-    let undoHistory = [];
-    let redoHistory = [];
-
-    // Hàm lưu trạng thái hiện tại (làm bản sao sâu của mảng)
-    function pushState() {
-        undoHistory.push({
-            placeholders3: placeholders3.slice(),
-            placeholders9: placeholders9.slice()
-        });
-        // Mỗi khi có thao tác mới, xóa redoHistory
-        redoHistory = [];
-    }
-
-    function undo() {
-        if (undoHistory.length > 0) {
-            // Lưu trạng thái hiện tại vào redoHistory
-            redoHistory.push({
-                placeholders3: placeholders3.slice(),
-                placeholders9: placeholders9.slice()
-            });
-            // Lấy trạng thái trước đó
-            let state = undoHistory.pop();
-            placeholders3 = state.placeholders3.slice();
-            placeholders9 = state.placeholders9.slice();
-            generateGrid();
-        }
-    }
-
-    function redo() {
-        if (redoHistory.length > 0) {
-            // Lưu trạng thái hiện tại vào undoHistory
-            undoHistory.push({
-                placeholders3: placeholders3.slice(),
-                placeholders9: placeholders9.slice()
-            });
-            // Lấy trạng thái đã hủy
-            let state = redoHistory.pop();
-            placeholders3 = state.placeholders3.slice();
-            placeholders9 = state.placeholders9.slice();
-            generateGrid();
-        }
-    }
-
-    function generateGrid() {
-        const size = isGrid3x3 ? 3 : 9;
-        const container = document.getElementById('mandala-grid');
-        container.innerHTML = '';
-        container.style.gridTemplateRows = `repeat(${size}, 1fr)`;
-        container.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
-        container.style.width = `${size * 120 + (size - 1) * 10}px`;
-        container.style.height = `${size * 120 + (size - 1) * 10}px`;
-
-        // Chọn mảng thứ tự phù hợp với grid hiện tại
-        const currentOrderedPositions = isGrid3x3 ? orderedPositions3x3 : orderedPositions9;
-        let data = isGrid3x3 ? placeholders3 : placeholders9;
-
-        data.slice(0, size * size).forEach((text, index) => {
-            const cell = document.createElement('div');
-            cell.className = 'cell';
-
-            let cellNumber = currentOrderedPositions[index];
-            if (cellNumber === 1) {
-                cell.classList.add('red');
-            } else if (cellNumber >= 2 && cellNumber <= 9) {
-                cell.classList.add('blue');
-            }
-
-            // Lưu MandalaLv và chỉ số vào dataset
-            cell.dataset.mandalaLv = cellNumber;
-            cell.dataset.index = index;
-
-            const textarea = document.createElement('textarea');
-            textarea.value = text || "";
-            textarea.dataset.index = index;
-            textarea.dataset.mandalaLv = cellNumber;
-
-            // Sự kiện input: mỗi khi thay đổi, lưu trạng thái nếu giá trị thay đổi
-            textarea.addEventListener('input', (e) => {
-                let newValue = e.target.value;
-                let idx = parseInt(e.target.dataset.index);
-                let mandalaLv = parseInt(e.target.dataset.mandalaLv);
-
-                // Kiểm tra nếu giá trị thay đổi so với lần cuối lưu (để tránh pushState quá nhiều)
-                if (!e.target.dataset.lastValue || e.target.dataset.lastValue !== newValue) {
-                    pushState();
-                    e.target.dataset.lastValue = newValue;
-                }
-
-                if (mandalaLv >= 1 && mandalaLv <= 9) {
-                    // Cập nhật placeholders3 cho grid 3x3 (tìm duy nhất ô có MandalaLv đó)
-                    let index3 = orderedPositions3x3.indexOf(mandalaLv);
-                    if (index3 !== -1) {
-                        placeholders3[index3] = newValue;
-                    }
-                    // Cập nhật tất cả các ô của grid 9x9 có cùng MandalaLv
-                    orderedPositions9.forEach((val, j) => {
-                        if (val === mandalaLv) {
-                            placeholders9[j] = newValue;
-                        }
-                    });
-                    // Nếu đang ở chế độ 9x9, cập nhật giao diện của tất cả các ô có cùng MandalaLv
-                    if (!isGrid3x3) {
-                        document.querySelectorAll('textarea[data-mandala-lv="' + mandalaLv + '"]').forEach(el => {
-                            if (el !== e.target) {
-                                el.value = newValue;
-                            }
-                        });
-                    }
-                } else {
-                    if (isGrid3x3) {
-                        placeholders3[idx] = newValue;
-                    } else {
-                        placeholders9[idx] = newValue;
-                    }
-                }
-            });
-
-            cell.appendChild(textarea);
-            container.appendChild(cell);
-        });
-    }
-
-    function toggleGrid() {
-        isGrid3x3 = !isGrid3x3;
-        generateGrid();
-    }
-
-    function handleSave() {
-        let gridCells = document.querySelectorAll('.mandala-grid .cell textarea');
-        let data = Array.from(gridCells).map(cell => cell.value.trim() === "" ? null : cell.value);
-
-        if (!isGrid3x3 && data.length !== 81) {
-            alert("Lỗi! Lưới 9x9 chưa đủ 81 ô.");
-            return;
-        }
-
-        let mandalaId = document.getElementById("mandalaId").value;
-
-        console.log("mandalaId:", mandalaId);
-        console.log("data:", data);
-        console.log("isGrid3x3:", isGrid3x3);
-
-        $.ajax({
-            type: "POST",
-            url: "/Chart/SaveMandalaTargets",
-            data: { mandalaId: mandalaId, data: data },
-            traditional: true,
-            success: function(response) {
-                alert(response.message);
-            },
-            error: function(err) {
-                alert("Có lỗi xảy ra khi lưu dữ liệu!");
-                console.error(err);
-            }
-        });
-    }
-
-    // Hàm Edit Mandala Name
-    function editMandalaName() {
-        let nameSpan = document.getElementById("mandalaNameText");
-        let editBtn = document.getElementById("editMandalaNameBtn");
-        if(editBtn.textContent.trim() === "Edit") {
-            let currentName = nameSpan.textContent.trim();
-            nameSpan.innerHTML = '<input type="text" id="mandalaNameInput" value="' + currentName + '" style="font-size:2.5rem; border:none; background:transparent; color:inherit;" />';
-            editBtn.textContent = "Save";
-        } else {
-            let nameInput = document.getElementById("mandalaNameInput");
-            let newName = nameInput.value;
-            nameSpan.textContent = newName;
-            editBtn.textContent = "Edit";
-            updateMandalaName(newName);
-        }
-    }
-
-    function updateMandalaName(newName) {
-        let mandalaId = document.getElementById("mandalaId").value;
-        $.ajax({
-            type: "POST",
-            url: "/Chart/UpdateMandalaName",
-            data: { id: mandalaId, name: newName },
-            traditional: true,
-            success: function(response) {
-                alert(response.message);
-            },
-            error: function(err) {
-                alert("Error updating Mandala Name!");
-                console.error(err);
-            }
-        });
-    }
-
-        function viewDetail() {
-        // Lấy giá trị mandala id từ input hidden
-        let mandalaId = document.getElementById("mandalaId").value;
-        // Chuyển hướng tới trang Table và truyền id qua query string
-        window.location.href = "/Table/Table?mandalaId=" + mandalaId;
-    }
-
-    // Khởi tạo giao diện
-    generateGrid();
+<script id="placeholders3Data" type="application/json">
+    @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Placeholders3))
 </script>
+<script id="placeholders9Data" type="application/json">
+    @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Placeholders9))
+</script>
+<script src="~/js/mandalaChart.js"></script>

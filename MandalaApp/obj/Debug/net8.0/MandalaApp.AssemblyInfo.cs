@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MandalaApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5888a99825555d2bec0f13baecdf3f1f58824c98")]
 [assembly: System.Reflection.AssemblyProductAttribute("MandalaApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MandalaApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

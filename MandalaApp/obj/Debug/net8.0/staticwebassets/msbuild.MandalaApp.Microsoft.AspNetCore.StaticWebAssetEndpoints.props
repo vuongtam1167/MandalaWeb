@@ -36,6 +36,42 @@
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-Jtxf9L\u002B5ITKRc1gIRl4VbUpGkRNfOBXjYTdhJD4facM="}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"5430"},{"Name":"Content-Type","Value":"image/x-icon"},{"Name":"ETag","Value":"\u0022Jtxf9L\u002B5ITKRc1gIRl4VbUpGkRNfOBXjYTdhJD4facM=\u0022"},{"Name":"Last-Modified","Value":"Wed, 05 Mar 2025 02:10:00 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/MandalaApp/images/avatars/1218cdcf-9649-467c-984c-7450e3f1d310_Screenshot 2025-02-27 154654.j2fa30h8m2.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\avatars\1218cdcf-9649-467c-984c-7450e3f1d310_Screenshot 2025-02-27 154654.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"j2fa30h8m2"},{"Name":"integrity","Value":"sha256-NaKbnSPY2ticQC1I9EurY\u002B\u002B1mDr4sKUO0RPc19tDYb0="},{"Name":"label","Value":"_content/MandalaApp/images/avatars/1218cdcf-9649-467c-984c-7450e3f1d310_Screenshot 2025-02-27 154654.png"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"1722"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022NaKbnSPY2ticQC1I9EurY\u002B\u002B1mDr4sKUO0RPc19tDYb0=\u0022"},{"Name":"Last-Modified","Value":"Mon, 17 Mar 2025 10:15:02 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/MandalaApp/images/avatars/1218cdcf-9649-467c-984c-7450e3f1d310_Screenshot 2025-02-27 154654.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\avatars\1218cdcf-9649-467c-984c-7450e3f1d310_Screenshot 2025-02-27 154654.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-NaKbnSPY2ticQC1I9EurY\u002B\u002B1mDr4sKUO0RPc19tDYb0="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"1722"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022NaKbnSPY2ticQC1I9EurY\u002B\u002B1mDr4sKUO0RPc19tDYb0=\u0022"},{"Name":"Last-Modified","Value":"Mon, 17 Mar 2025 10:15:02 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/MandalaApp/images/avatars/4d5c77d9-9ebc-47bf-8dd3-3beba8804dbb_Screenshot 2025-02-28 143503.ac8ls66rie.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\avatars\4d5c77d9-9ebc-47bf-8dd3-3beba8804dbb_Screenshot 2025-02-28 143503.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"ac8ls66rie"},{"Name":"integrity","Value":"sha256-erERcnEUxrlaziL514aH\u002B9pHKvAeY7oZ82lFHAg\u002BvX0="},{"Name":"label","Value":"_content/MandalaApp/images/avatars/4d5c77d9-9ebc-47bf-8dd3-3beba8804dbb_Screenshot 2025-02-28 143503.png"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"1714"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022erERcnEUxrlaziL514aH\u002B9pHKvAeY7oZ82lFHAg\u002BvX0=\u0022"},{"Name":"Last-Modified","Value":"Mon, 24 Mar 2025 07:05:41 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/MandalaApp/images/avatars/4d5c77d9-9ebc-47bf-8dd3-3beba8804dbb_Screenshot 2025-02-28 143503.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\avatars\4d5c77d9-9ebc-47bf-8dd3-3beba8804dbb_Screenshot 2025-02-28 143503.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-erERcnEUxrlaziL514aH\u002B9pHKvAeY7oZ82lFHAg\u002BvX0="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"1714"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022erERcnEUxrlaziL514aH\u002B9pHKvAeY7oZ82lFHAg\u002BvX0=\u0022"},{"Name":"Last-Modified","Value":"Mon, 24 Mar 2025 07:05:41 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/MandalaApp/images/avatars/temp/a249b52b-7618-49b9-9125-fc57f231cb3f_Screenshot 2025-02-27 154654.j2fa30h8m2.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\avatars\temp\a249b52b-7618-49b9-9125-fc57f231cb3f_Screenshot 2025-02-27 154654.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"j2fa30h8m2"},{"Name":"integrity","Value":"sha256-NaKbnSPY2ticQC1I9EurY\u002B\u002B1mDr4sKUO0RPc19tDYb0="},{"Name":"label","Value":"_content/MandalaApp/images/avatars/temp/a249b52b-7618-49b9-9125-fc57f231cb3f_Screenshot 2025-02-27 154654.png"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"1722"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022NaKbnSPY2ticQC1I9EurY\u002B\u002B1mDr4sKUO0RPc19tDYb0=\u0022"},{"Name":"Last-Modified","Value":"Mon, 17 Mar 2025 08:05:58 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/MandalaApp/images/avatars/temp/a249b52b-7618-49b9-9125-fc57f231cb3f_Screenshot 2025-02-27 154654.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\avatars\temp\a249b52b-7618-49b9-9125-fc57f231cb3f_Screenshot 2025-02-27 154654.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-NaKbnSPY2ticQC1I9EurY\u002B\u002B1mDr4sKUO0RPc19tDYb0="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"1722"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022NaKbnSPY2ticQC1I9EurY\u002B\u002B1mDr4sKUO0RPc19tDYb0=\u0022"},{"Name":"Last-Modified","Value":"Mon, 17 Mar 2025 08:05:58 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/MandalaApp/js/demo/chart-area-demo.cge9ud2ou6.js">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\demo\chart-area-demo.js'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
@@ -83,6 +119,30 @@
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"w9gruc5uo1"},{"Name":"integrity","Value":"sha256-3BYZ/ie9x2nIWSAO1N9M0VISPR5FfP5Wg0EKHZzNOoo="},{"Name":"label","Value":"_content/MandalaApp/js/demo/datatables-demo.js"}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"103"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u00223BYZ/ie9x2nIWSAO1N9M0VISPR5FfP5Wg0EKHZzNOoo=\u0022"},{"Name":"Last-Modified","Value":"Thu, 27 Feb 2025 03:55:14 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/MandalaApp/js/mandalaChart.js">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\mandalaChart.js'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-cNaU86ZnfoT7IGwtRnrBTAHxdbITMSL4Krin0JttEHs="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"11511"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u0022cNaU86ZnfoT7IGwtRnrBTAHxdbITMSL4Krin0JttEHs=\u0022"},{"Name":"Last-Modified","Value":"Fri, 21 Mar 2025 07:02:04 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/MandalaApp/js/mandalaChart.o273n30iro.js">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\mandalaChart.js'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"o273n30iro"},{"Name":"integrity","Value":"sha256-cNaU86ZnfoT7IGwtRnrBTAHxdbITMSL4Krin0JttEHs="},{"Name":"label","Value":"_content/MandalaApp/js/mandalaChart.js"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"11511"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u0022cNaU86ZnfoT7IGwtRnrBTAHxdbITMSL4Krin0JttEHs=\u0022"},{"Name":"Last-Modified","Value":"Fri, 21 Mar 2025 07:02:04 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/MandalaApp/js/mandalaTable.0m1l2akra2.js">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\mandalaTable.js'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"0m1l2akra2"},{"Name":"integrity","Value":"sha256-aKVcX194N2lO\u002BjlYuZbB3woZuj4aKFGpdXr4lMYmUY0="},{"Name":"label","Value":"_content/MandalaApp/js/mandalaTable.js"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"15417"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u0022aKVcX194N2lO\u002BjlYuZbB3woZuj4aKFGpdXr4lMYmUY0=\u0022"},{"Name":"Last-Modified","Value":"Fri, 21 Mar 2025 04:26:29 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/MandalaApp/js/mandalaTable.js">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\mandalaTable.js'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-aKVcX194N2lO\u002BjlYuZbB3woZuj4aKFGpdXr4lMYmUY0="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"15417"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u0022aKVcX194N2lO\u002BjlYuZbB3woZuj4aKFGpdXr4lMYmUY0=\u0022"},{"Name":"Last-Modified","Value":"Fri, 21 Mar 2025 04:26:29 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/MandalaApp/js/sb-admin-2.ed8hd3w5um.js">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\sb-admin-2.js'))</AssetFile>
@@ -796,13 +856,13 @@
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\MandalaApp.jj4aofs3cm.bundle.scp.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-gZY9wITu0IG9F6/qmhry6VYofMt4c9oDtl0RjqEG7qs="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"1128"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022gZY9wITu0IG9F6/qmhry6VYofMt4c9oDtl0RjqEG7qs=\u0022"},{"Name":"Last-Modified","Value":"Fri, 14 Mar 2025 04:17:45 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"1128"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022gZY9wITu0IG9F6/qmhry6VYofMt4c9oDtl0RjqEG7qs=\u0022"},{"Name":"Last-Modified","Value":"Mon, 24 Mar 2025 06:46:53 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/MandalaApp/MandalaApp.jj4aofs3cm.bundle.scp.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\MandalaApp.jj4aofs3cm.bundle.scp.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"jj4aofs3cm"},{"Name":"integrity","Value":"sha256-gZY9wITu0IG9F6/qmhry6VYofMt4c9oDtl0RjqEG7qs="},{"Name":"label","Value":"_content/MandalaApp/MandalaApp.bundle.scp.css"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"1128"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022gZY9wITu0IG9F6/qmhry6VYofMt4c9oDtl0RjqEG7qs=\u0022"},{"Name":"Last-Modified","Value":"Fri, 14 Mar 2025 04:17:45 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"1128"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022gZY9wITu0IG9F6/qmhry6VYofMt4c9oDtl0RjqEG7qs=\u0022"},{"Name":"Last-Modified","Value":"Mon, 24 Mar 2025 06:46:53 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/MandalaApp/scss/navs/_global.ktyzgqanqq.scss">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\scss\navs\_global.scss'))</AssetFile>

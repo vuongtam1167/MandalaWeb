@@ -10,6 +10,7 @@ C:\Users\ITSer\Downloads\VisualProject\MandalaApp\MandalaApp\bin\Debug\net8.0\Ma
 C:\Users\ITSer\Downloads\VisualProject\MandalaApp\MandalaApp\bin\Debug\net8.0\Azure.Core.dll
 C:\Users\ITSer\Downloads\VisualProject\MandalaApp\MandalaApp\bin\Debug\net8.0\Azure.Identity.dll
 C:\Users\ITSer\Downloads\VisualProject\MandalaApp\MandalaApp\bin\Debug\net8.0\Humanizer.dll
+C:\Users\ITSer\Downloads\VisualProject\MandalaApp\MandalaApp\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.Google.dll
 C:\Users\ITSer\Downloads\VisualProject\MandalaApp\MandalaApp\bin\Debug\net8.0\Microsoft.AspNetCore.Razor.Language.dll
 C:\Users\ITSer\Downloads\VisualProject\MandalaApp\MandalaApp\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\ITSer\Downloads\VisualProject\MandalaApp\MandalaApp\bin\Debug\net8.0\Microsoft.Bcl.Cryptography.dll
@@ -257,6 +258,7 @@ C:\Users\ITSer\Downloads\VisualProject\MandalaApp\MandalaApp\obj\Debug\net8.0\Ma
 C:\Users\ITSer\Downloads\VisualProject\MandalaApp\MandalaApp\obj\Debug\net8.0\MandalaApp.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\ITSer\Downloads\VisualProject\MandalaApp\MandalaApp\obj\Debug\net8.0\MandalaApp.RazorAssemblyInfo.cache
 C:\Users\ITSer\Downloads\VisualProject\MandalaApp\MandalaApp\obj\Debug\net8.0\MandalaApp.RazorAssemblyInfo.cs
+C:\Users\ITSer\Downloads\VisualProject\MandalaApp\MandalaApp\obj\Debug\net8.0\MandalaApp.sourcelink.json
 C:\Users\ITSer\Downloads\VisualProject\MandalaApp\MandalaApp\obj\Debug\net8.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\ITSer\Downloads\VisualProject\MandalaApp\MandalaApp\obj\Debug\net8.0\scopedcss\bundle\MandalaApp.styles.css
 C:\Users\ITSer\Downloads\VisualProject\MandalaApp\MandalaApp\obj\Debug\net8.0\scopedcss\projectbundle\MandalaApp.bundle.scp.css
@@ -276,4 +278,3 @@ C:\Users\ITSer\Downloads\VisualProject\MandalaApp\MandalaApp\obj\Debug\net8.0\re
 C:\Users\ITSer\Downloads\VisualProject\MandalaApp\MandalaApp\obj\Debug\net8.0\MandalaApp.pdb
 C:\Users\ITSer\Downloads\VisualProject\MandalaApp\MandalaApp\obj\Debug\net8.0\MandalaApp.genruntimeconfig.cache
 C:\Users\ITSer\Downloads\VisualProject\MandalaApp\MandalaApp\obj\Debug\net8.0\ref\MandalaApp.dll
-C:\Users\ITSer\Downloads\VisualProject\MandalaApp\MandalaApp\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.Google.dll

@@ -33,18 +33,44 @@ namespace MandalaApp.Controllers
                 return Forbid();
             }
 
+            // Lấy thông tin Mandala
             var targets9 = _repository.GetMandalaTargetsByIdMandala(selectedId);
             var targets3 = _repository.GetMandalaTargets3x3(selectedId);
+            int classMandala = _repository.GetMandalaClassById(selectedId);
+
+            // Truyền class sang view để kiểm tra giao diện hiển thị
+            ViewBag.MandalaClass = classMandala;
+            ViewBag.Avatar = _repository.GetAvatarPathByUserId(currentUserId);
+            ViewBag.MandalaName = _repository.GetMandalaNameById(selectedId);
+            ViewBag.Id = selectedId;
 
             var model = new MandalaChartViewModel
             {
-                GridSize = 3,
+                GridSize = 3, // mặc định hiển thị 3x3 nếu class = 1
                 Placeholders9 = targets9,
                 Placeholders3 = targets3
             };
-            ViewBag.MandalaName = _repository.GetMandalaNameById(selectedId);
-            ViewBag.Id = selectedId;
+
             return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult UpgradeMandalaClass(long mandalaId)
+        {
+            try
+            {
+                // Lấy ID của người dùng hiện tại từ Claims
+                long currentUserId = Convert.ToInt64(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                DateTime now = DateTime.Now;
+
+                // Cập nhật class cho Mandala từ 1 lên 2 (có thể bổ sung kiểm tra điều kiện ở repository)
+                _repository.UpdateMandalaClass(mandalaId, 2, now, currentUserId);
+                return Json(new { success = true, message = "Mandala class upgraded successfully!" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error upgrading class: " + ex.Message });
+            }
         }
 
         [HttpPost]
@@ -79,7 +105,6 @@ namespace MandalaApp.Controllers
                 long currentUserId = Convert.ToInt64(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 DateTime now = DateTime.Now;
 
-                // Gọi repository để cập nhật tên và cập nhật ngày sửa, người sửa
                 _repository.UpdateMandalaName(id, name, now, currentUserId);
                 return Json(new { success = true, message = "Mandala name updated successfully!" });
             }
@@ -88,6 +113,5 @@ namespace MandalaApp.Controllers
                 return Json(new { success = false, message = "Error: " + ex.Message });
             }
         }
-
     }
 }
