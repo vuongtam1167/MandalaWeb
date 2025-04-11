@@ -56,7 +56,6 @@ namespace MandalaApp.DataAccess
             return details;
         }
 
-
         public List<Mandala> GetMandalas()
         {
             var madalas = new List<Mandala>();
@@ -243,6 +242,7 @@ WHERE M.Status = 1
 
             return mandalaClass;
         }
+
         public void SaveMandalaTargets(long mandalaId, List<string> data, DateTime modifiedDate, long modifiedUserId)
         {
             List<int> orderedPositions;
@@ -311,8 +311,7 @@ ELSE
             }
         }
 
-
-        public String GetMandalaNameById(long Id)
+        public string GetMandalaNameById(long Id)
         {
             var result = "";
 
@@ -414,7 +413,6 @@ ELSE
             }
             return details;
         }
-
 
         public List<SelectListItem> GetTargetOptions(long mandalaId)
         {
@@ -657,6 +655,7 @@ ELSE
                 return sb.ToString();
             }
         }
+
         public string ComputeMD5HashPass(string input)
         {
             using (MD5 md5 = MD5.Create())
@@ -672,8 +671,8 @@ ELSE
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                string sql = "INSERT INTO [User] (UserName, Password, Name, Email, CreatedDate, Status) " +
-                             "VALUES (@UserName, @Password, @Name, @Email, @CreatedDate, @Status)";
+                string sql = "INSERT INTO [User] (UserName, Password, Name, Email, Avatar, CreatedDate, Status) " +
+                             "VALUES (@UserName, @Password, @Name, @Email, '/img/default-avatar.png', @CreatedDate, @Status)";
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     command.Parameters.AddWithValue("@UserName", user.UserName);
@@ -730,7 +729,6 @@ ELSE
             }
         }
 
-
         public bool IsMandalaAccessible(long currentUserId, long mandalaId)
         {
             bool accessible = false;
@@ -759,7 +757,6 @@ ELSE
             }
             return accessible;
         }
-
 
         public User GetUserById(long id)
         {
@@ -792,7 +789,6 @@ ELSE
             }
             return user;
         }
-
 
         public void UpdateUser(User user)
         {
@@ -850,15 +846,44 @@ ELSE
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                // Chèn bản ghi vào bảng MandalaShare, bao gồm thông tin người chia sẻ (SharedBy)
                 string sql = @"
-            INSERT INTO MandalaShare (MandalaID, SharedUserID, Permission, SharedDate, SharedBy)
-            VALUES (@MandalaID, @SharedUserID, @Permission, GETDATE(), @SharedBy)";
+            IF EXISTS (SELECT 1 FROM MandalaShare WHERE MandalaID = @MandalaID AND SharedUserID = @SharedUserID)
+            BEGIN
+                UPDATE MandalaShare 
+                SET Permission = @Permission, SharedDate = GETDATE(), SharedBy = @SharedBy
+                WHERE MandalaID = @MandalaID AND SharedUserID = @SharedUserID
+            END
+            ELSE
+            BEGIN
+                INSERT INTO MandalaShare (MandalaID, SharedUserID, Permission, SharedDate, SharedBy)
+                VALUES (@MandalaID, @SharedUserID, @Permission, GETDATE(), @SharedBy)
+            END";
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     command.Parameters.AddWithValue("@MandalaID", mandalaId);
                     command.Parameters.AddWithValue("@SharedUserID", sharedUserId);
                     command.Parameters.AddWithValue("@Permission", permission);
+                    command.Parameters.AddWithValue("@SharedBy", sharedBy);
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void RemoveShareMandala(long mandalaId, long sharedUserId, long sharedBy)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                // Xóa bản ghi trong bảng MandalaShare dựa vào MandalaID, SharedUserID và SharedBy
+                string sql = @"
+            DELETE FROM MandalaShare
+            WHERE MandalaID = @MandalaID
+              AND SharedUserID = @SharedUserID
+              AND SharedBy = @SharedBy";
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@MandalaID", mandalaId);
+                    command.Parameters.AddWithValue("@SharedUserID", sharedUserId);
                     command.Parameters.AddWithValue("@SharedBy", sharedBy);
                     command.ExecuteNonQuery();
                 }
@@ -886,7 +911,7 @@ ELSE
             }
         }
 
-        public List<UserSearchResult> SearchUsers(string query, long currentUserId)
+        public List<UserSearchResult> SearchUsers(string query, long currentUserId, long mandalaid)
         {
             var results = new List<UserSearchResult>();
 
@@ -894,19 +919,24 @@ ELSE
             {
                 connection.Open();
 
-                // Truy vấn tìm kiếm theo Name, chỉ lấy những người có Status = 1 và không lấy user hiện đang đăng nhập
                 string sql = @"
-            SELECT ID, Name, Avatar 
+            SELECT ID, Email, Name, Avatar 
             FROM [User]
-            WHERE Name LIKE @query
+            WHERE Email LIKE @query
               AND Status = 1
               AND ID <> @currentUserId
-            ORDER BY Name ASC";
+              AND ID NOT IN (
+                  SELECT ID 
+                  FROM Mandala 
+                  WHERE ID = @mandalaid
+              )
+            ORDER BY Email ASC";
 
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     command.Parameters.AddWithValue("@query", "%" + query + "%");
                     command.Parameters.AddWithValue("@currentUserId", currentUserId);
+                    command.Parameters.AddWithValue("@mandalaid", mandalaid);
 
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
@@ -915,6 +945,7 @@ ELSE
                             results.Add(new UserSearchResult
                             {
                                 id = reader.GetInt64(reader.GetOrdinal("ID")),
+                                email = reader["Email"] == DBNull.Value ? "" : reader["Email"].ToString(),
                                 name = reader["Name"] == DBNull.Value ? "" : reader["Name"].ToString(),
                                 avatar = reader["Avatar"] == DBNull.Value ? "default-avatar.png" : reader["Avatar"].ToString()
                             });
@@ -924,6 +955,43 @@ ELSE
             }
 
             return results;
+        }
+
+        public ShareRequest SearchShare(long mandalaid, long usershare)
+        {
+            ShareRequest result = null;
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                string sql = @"
+            SELECT MandalaID, SharedUserID, Permission 
+            FROM [MandalaShare]
+            WHERE MandalaID = @mandalaid
+              AND SharedUserID = @usershare";
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@mandalaid", mandalaid);
+                    command.Parameters.AddWithValue("@usershare", usershare);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            result = new ShareRequest
+                            {
+                                MandalaId = reader["MandalaID"] == DBNull.Value ? 0 : Convert.ToInt32(reader["MandalaID"]),
+                                SharedUserId = reader["SharedUserID"] == DBNull.Value ? 0 : Convert.ToInt64(reader["SharedUserID"]),
+                                Permission = reader["Permission"] == DBNull.Value ? null : reader["Permission"].ToString()
+                            };
+                        }
+                    }
+                }
+            }
+
+            return result;
         }
 
         public string GetAvatarPathByUserId(long userId)
@@ -961,6 +1029,21 @@ ELSE
             }
         }
 
+        public bool IsEmailExists(string email)
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+                string query = "SELECT COUNT(*) FROM [User] WHERE Email = @Email";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Email", email);
+                    int count = (int)cmd.ExecuteScalar();
+                    return count > 0;
+                }
+            }
+        }
+
         public void UpdateMandalaClass(long mandalaId, int newClass, DateTime modifiedDate, long modifiedUserId)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -976,6 +1059,92 @@ ELSE
                     command.ExecuteNonQuery();
                 }
             }
+        }
+
+        public MandalaChartData GetStatusChart(int mandalaId)
+        {
+            int completed = 0;
+            int total = 0;
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                string baseCondition = @"
+            MandalaID = @MandalaID AND NOT (
+	            (MandalaLv = 1 AND EXISTS (SELECT 1 FROM dbo.Mandala_Target tt WHERE tt.Target IS NOT NULL AND tt.MandalaID = md.MandalaID AND tt.MandalaLv BETWEEN 2 AND 9))
+	        OR  (MandalaLv = 2 AND EXISTS (SELECT 1 FROM dbo.Mandala_Target tt WHERE tt.Target IS NOT NULL AND tt.MandalaID = md.MandalaID AND tt.MandalaLv BETWEEN 10 AND 17))
+	        OR  (MandalaLv = 3 AND EXISTS (SELECT 1 FROM dbo.Mandala_Target tt WHERE tt.Target IS NOT NULL AND tt.MandalaID = md.MandalaID AND tt.MandalaLv BETWEEN 18 AND 25))
+	        OR  (MandalaLv = 4 AND EXISTS (SELECT 1 FROM dbo.Mandala_Target tt WHERE tt.Target IS NOT NULL AND tt.MandalaID = md.MandalaID AND tt.MandalaLv BETWEEN 26 AND 33))
+	        OR  (MandalaLv = 5 AND EXISTS (SELECT 1 FROM dbo.Mandala_Target tt WHERE tt.Target IS NOT NULL AND tt.MandalaID = md.MandalaID AND tt.MandalaLv BETWEEN 34 AND 41))
+	        OR  (MandalaLv = 6 AND EXISTS (SELECT 1 FROM dbo.Mandala_Target tt WHERE tt.Target IS NOT NULL AND tt.MandalaID = md.MandalaID AND tt.MandalaLv BETWEEN 42 AND 49))
+	        OR  (MandalaLv = 7 AND EXISTS (SELECT 1 FROM dbo.Mandala_Target tt WHERE tt.Target IS NOT NULL AND tt.MandalaID = md.MandalaID AND tt.MandalaLv BETWEEN 50 AND 57))
+	        OR  (MandalaLv = 8 AND EXISTS (SELECT 1 FROM dbo.Mandala_Target tt WHERE tt.Target IS NOT NULL AND tt.MandalaID = md.MandalaID AND tt.MandalaLv BETWEEN 58 AND 65))
+	        OR  (MandalaLv = 9 AND EXISTS (SELECT 1 FROM dbo.Mandala_Target tt WHERE tt.Target IS NOT NULL AND tt.MandalaID = md.MandalaID AND tt.MandalaLv BETWEEN 66 AND 73))
+            )";
+
+                // Đếm completed
+                string sqlCompleted = $@"
+            SELECT COUNT(*) 
+            FROM Mandala_Detail md
+            WHERE Status = 1 AND {baseCondition}";
+
+                // Đếm tổng không bao gồm các cấp có mục tiêu con
+                string sqlTotal = $@"
+            SELECT COUNT(*) 
+            FROM Mandala_Detail md
+            WHERE {baseCondition}";
+
+                using (SqlCommand cmdTotal = new SqlCommand(sqlTotal, connection))
+                using (SqlCommand cmdCompleted = new SqlCommand(sqlCompleted, connection))
+                {
+                    cmdTotal.Parameters.AddWithValue("@MandalaID", mandalaId);
+                    cmdCompleted.Parameters.AddWithValue("@MandalaID", mandalaId);
+
+                    total = (int)cmdTotal.ExecuteScalar();
+                    completed = (int)cmdCompleted.ExecuteScalar();
+                }
+            }
+
+            return new MandalaChartData
+            {
+                Completed = completed,
+                Incomplete = total - completed
+            };
+        }
+
+        public string GetMandalaPermission(long userId, long mandalaId)
+        {
+            string permission = null;
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                string checkCreatorSql = "SELECT COUNT(1) FROM Mandala WHERE ID = @mandalaId AND CreatedUserID = @userId";
+                using (SqlCommand checkCmd = new SqlCommand(checkCreatorSql, connection))
+                {
+                    checkCmd.Parameters.AddWithValue("@mandalaId", mandalaId);
+                    checkCmd.Parameters.AddWithValue("@userId", userId);
+                    int count = (int)checkCmd.ExecuteScalar();
+                    if (count > 0)
+                    {
+                        return "write";
+                    }
+                }
+
+                string sql = "SELECT Permission FROM MandalaShare WHERE MandalaID = @mandalaId AND SharedUserID = @userId";
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@mandalaId", mandalaId);
+                    command.Parameters.AddWithValue("@userId", userId);
+                    object result = command.ExecuteScalar();
+                    if (result != null && result != DBNull.Value)
+                    {
+                        permission = result.ToString();
+                    }
+                }
+            }
+            return permission;
         }
     }
 }

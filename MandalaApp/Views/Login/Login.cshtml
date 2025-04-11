@@ -18,6 +18,34 @@
 
     <!-- Custom styles for this template-->
     <link href="@Url.Content("~/css/sb-admin-2.min.css")" rel="stylesheet" />
+
+    <style>
+        @@keyframes rotatePulse {
+            0% {
+                transform: rotate(0deg) scale(1);
+            }
+
+            25% {
+                transform: rotate(90deg) scale(1.05);
+            }
+
+            50% {
+                transform: rotate(180deg) scale(1);
+            }
+
+            75% {
+                transform: rotate(270deg) scale(1.05);
+            }
+
+            100% {
+                transform: rotate(360deg) scale(1);
+            }
+        }
+
+        .bg-register-image {
+            background: linear-gradient(to bottom right, #01579b, #81d4fa);
+        }
+    </style>
 </head>
 <body class="bg-gradient-primary">
     <div class="container">
@@ -26,14 +54,70 @@
             <div class="col-xl-10 col-lg-12 col-md-9">
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0">
-                        <!-- Nested Row within Card Body -->
                         <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                            <!-- Left Logo Column -->
+                            <div class="col-lg-6 d-none d-lg-flex align-items-center justify-content-center bg-register-image" style="padding: 20px;">
+                                <div style="width: 250px; height: 250px;">
+                                    <i class="mandala-icon" style="display: block; animation: rotatePulse 10s infinite linear;">
+                                        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+                                            <defs>
+                                                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                    <stop offset="0%" style="stop-color:#81d4fa; stop-opacity:1"></stop>
+                                                    <stop offset="50%" style="stop-color:#4fc3f7; stop-opacity:1"></stop>
+                                                    <stop offset="100%" style="stop-color:#01579b; stop-opacity:1"></stop>
+                                                </linearGradient>
+                                                <radialGradient id="grad2" cx="50%" cy="50%" r="50%">
+                                                    <stop offset="0%" style="stop-color:#ffffff; stop-opacity:0.9"></stop>
+                                                    <stop offset="100%" style="stop-color:#81d4fa; stop-opacity:0.5"></stop>
+                                                </radialGradient>
+                                                <radialGradient id="gradCenter" cx="50%" cy="50%" r="50%">
+                                                    <stop offset="0%" style="stop-color:#ffffff; stop-opacity:1"></stop>
+                                                    <stop offset="100%" style="stop-color:#ffcc00; stop-opacity:1"></stop>
+                                                </radialGradient>
+                                                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                                                    <feGaussianBlur stdDeviation="3" result="coloredBlur"></feGaussianBlur>
+                                                    <feMerge>
+                                                        <feMergeNode in="coloredBlur"></feMergeNode>
+                                                        <feMergeNode in="SourceGraphic"></feMergeNode>
+                                                    </feMerge>
+                                                </filter>
+                                            </defs>
+                                            <circle cx="100" cy="100" r="40" fill="url(#gradCenter)" stroke="#b8860b" stroke-width="4" filter="url(#glow)"></circle>
+                                            <circle cx="100" cy="100" r="12" fill="#ffffff" opacity="0.8"></circle>
+                                            <g stroke-width="2">
+                                                <circle cx="100" cy="100" r="45" stroke="#01579b" fill="url(#grad2)"></circle>
+                                                <circle cx="100" cy="100" r="65" stroke="#0288d1" fill="url(#grad2)"></circle>
+                                                <circle cx="100" cy="100" r="85" stroke="#81d4fa" fill="url(#grad2)"></circle>
+                                            </g>
+                                            <g stroke-width="2">
+                                                <path d="M100 15 Q140 40 100 100 Q60 40 100 15" stroke="#002f6c" fill="#002f6c"></path>
+                                                <path d="M185 100 Q150 140 100 100 Q150 60 185 100" stroke="#01579b" fill="#01579b"></path>
+                                                <path d="M100 185 Q140 150 100 100 Q60 150 100 185" stroke="#0277bd" fill="#0277bd"></path>
+                                                <path d="M15 100 Q50 140 100 100 Q50 60 15 100" stroke="#4fc3f7" fill="#4fc3f7"></path>
+                                            </g>
+                                            <g stroke-width="2">
+                                                <path d="M45 45 Q75 20 100 45 Q125 20 155 45" stroke="#0288d1" fill="none"></path>
+                                                <path d="M45 155 Q75 180 100 155 Q125 180 155 155" stroke="#81d4fa" fill="none"></path>
+                                                <path d="M45 45 Q20 75 45 100 Q20 125 45 155" stroke="#b3e5fc" fill="none"></path>
+                                                <path d="M155 45 Q180 75 155 100 Q180 125 155 155" stroke="#ffffff" fill="none"></path>
+                                            </g>
+                                            <g transform="rotate(45, 100, 100)" stroke-width="2">
+                                                <path d="M100 15 Q140 40 100 100 Q60 40 100 15" stroke="#003366" fill="#003366"></path>
+                                                <path d="M185 100 Q150 140 100 100 Q150 60 185 100" stroke="#01579b" fill="#01579b"></path>
+                                                <path d="M100 185 Q140 150 100 100 Q60 150 100 185" stroke="#0277bd" fill="#0277bd"></path>
+                                                <path d="M15 100 Q50 140 100 100 Q50 60 15 100" stroke="#4fc3f7" fill="#4fc3f7"></path>
+                                            </g>
+                                            <circle cx="100" cy="100" r="95" fill="none" stroke="url(#grad1)" stroke-width="8"></circle>
+                                        </svg>
+                                    </i>
+                                </div>
+                            </div>
+
+                            <!-- Right Login Form -->
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
-                                        @* Hiển thị thông báo lỗi chung nếu có *@
                                         @if (ViewBag.ErrorMessage != null)
                                         {
                                             <div class="alert alert-danger" role="alert">
@@ -54,17 +138,14 @@
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
                                                 @Html.CheckBox("RememberMe", false, new { @class = "custom-control-input", id = "customCheck" })
-                                                <label class="custom-control-label" for="customCheck">
-                                                    Remember Me
-                                                </label>
+                                                <label class="custom-control-label" for="customCheck">Remember Me</label>
                                             </div>
                                         </div>
                                         <button type="submit" class="btn btn-primary btn-user btn-block">
                                             Login
                                         </button>
-                                        <hr/>
+                                        <hr />
                                     }
-                                    <hr />
                                     <div class="text-center">
                                         <a class="small" href="@Url.Action("ForgotPassword", "Account")">Forgot Password?</a>
                                     </div>
@@ -80,14 +161,10 @@
         </div>
     </div>
 
-    <!-- Bootstrap core JavaScript-->
+    <!-- Scripts -->
     <script src="@Url.Content("~/vendor/jquery/jquery.min.js")"></script>
     <script src="@Url.Content("~/vendor/bootstrap/js/bootstrap.bundle.min.js")"></script>
-
-    <!-- Core plugin JavaScript-->
     <script src="@Url.Content("~/vendor/jquery-easing/jquery.easing.min.js")"></script>
-
-    <!-- Custom scripts for all pages-->
     <script src="@Url.Content("~/js/sb-admin-2.min.js")"></script>
 </body>
 </html>

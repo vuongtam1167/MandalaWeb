@@ -126,15 +126,24 @@
         <nav class="navbar navbar-expand navbar-light bg-white topbar fixed-top static-top shadow px-3" style="margin-left:104px">
             <!-- Icon Buttons & Navbar -->
             <div class="d-flex align-items-center">
-                <button class="btn btn-outline-primary btn-sm mx-1" onclick="handleSave()">
-                    <i class="fas fa-save"></i> Save
-                </button>
-                <button class="btn btn-outline-secondary btn-sm mx-1" onclick="undo()">
-                    <i class="fas fa-undo"></i> Undo
-                </button>
-                <button class="btn btn-outline-secondary btn-sm mx-1" onclick="redo()">
-                    <i class="fas fa-redo"></i> Redo
-                </button>
+                <!-- Các nút thao tác chỉ hiển thị nếu có quyền chỉnh sửa -->
+                @if (ViewBag.MandalaPermission == "owner" || ViewBag.MandalaPermission == "write")
+                {
+                    <button class="btn btn-outline-primary btn-sm mx-1" onclick="handleSave()">
+                        <i class="fas fa-save"></i> Save
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm mx-1" onclick="undo()">
+                        <i class="fas fa-undo"></i> Undo
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm mx-1" onclick="redo()">
+                        <i class="fas fa-redo"></i> Redo
+                    </button>
+                }
+                else
+                {
+                    <!-- Nếu quyền chỉ xem, có thể hiển thị nút chỉ để quay về hoặc refresh -->
+                    <span class="text-muted">Chế độ xem</span>
+                }
             </div>
             <div class="mx-auto d-flex align-items-center justify-content-center">
                 <span id="mandalaNameText" class="text-primary font-weight-bold" style="font-size:2.5rem;">
@@ -205,5 +214,8 @@
 </script>
 <script id="placeholders9Data" type="application/json">
     @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Placeholders9))
+</script>
+<script type="text/javascript">
+    var canEdit = ["owner", "write"].indexOf("@ViewBag.MandalaPermission") !== -1;
 </script>
 <script src="~/js/mandalaChart.js"></script>

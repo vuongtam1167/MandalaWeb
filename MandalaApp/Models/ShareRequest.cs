@@ -4,6 +4,6 @@
     {
         public long MandalaId { get; set; }
         public long SharedUserId { get; set; }
-        public string Permission { get; set; } = "read";
+        public string Permission { get; set; } = "Hạn chế";
     }
 }

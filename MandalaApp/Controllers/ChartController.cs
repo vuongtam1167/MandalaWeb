@@ -25,8 +25,7 @@ namespace MandalaApp.Controllers
             // Lấy ID của user hiện tại từ Claims (được lưu khi đăng nhập)
             long currentUserId = Convert.ToInt64(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
-            // Kiểm tra quyền truy cập:
-            // Chỉ cho phép nếu user là người tạo Mandala hoặc Mandala được share cho user đó
+            // Kiểm tra quyền truy cập tổng quát (chỉ cho những người được share hoặc tạo)
             bool accessible = _repository.IsMandalaAccessible(currentUserId, selectedId);
             if (!accessible)
             {
@@ -38,11 +37,16 @@ namespace MandalaApp.Controllers
             var targets3 = _repository.GetMandalaTargets3x3(selectedId);
             int classMandala = _repository.GetMandalaClassById(selectedId);
 
-            // Truyền class sang view để kiểm tra giao diện hiển thị
-            ViewBag.MandalaClass = classMandala;
+            // Lấy avatar và tên Mandala
             ViewBag.Avatar = _repository.GetAvatarPathByUserId(currentUserId);
             ViewBag.MandalaName = _repository.GetMandalaNameById(selectedId);
             ViewBag.Id = selectedId;
+            ViewBag.MandalaClass = classMandala;
+
+            // Lấy quyền của user: "owner" / "write" / "read"
+            // Nếu là người tạo hoặc có quyền write thì toàn quyền, còn read chỉ xem.
+            string permission = _repository.GetMandalaPermission(currentUserId, selectedId);
+            ViewBag.MandalaPermission = permission;
 
             var model = new MandalaChartViewModel
             {

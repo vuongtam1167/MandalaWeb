@@ -4,12 +4,14 @@ wwwroot\favicon.ico
 wwwroot\images\avatars\1218cdcf-9649-467c-984c-7450e3f1d310_Screenshot 2025-02-27 154654.png
 wwwroot\images\avatars\4d5c77d9-9ebc-47bf-8dd3-3beba8804dbb_Screenshot 2025-02-28 143503.png
 wwwroot\images\avatars\temp\a249b52b-7618-49b9-9125-fc57f231cb3f_Screenshot 2025-02-27 154654.png
+wwwroot\img\default-avatar.png
 wwwroot\js\demo\chart-area-demo.js
 wwwroot\js\demo\chart-bar-demo.js
 wwwroot\js\demo\chart-pie-demo.js
 wwwroot\js\demo\datatables-demo.js
 wwwroot\js\mandalaChart.js
 wwwroot\js\mandalaTable.js
+wwwroot\js\saveData.js
 wwwroot\js\sb-admin-2.js
 wwwroot\js\sb-admin-2.min.js
 wwwroot\lib\bootstrap\dist\css\bootstrap.css

@@ -10,9 +10,9 @@
 }
 
 <head>
-    <!-- Font Awesome và Google Font Roboto -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
+</head>
     <style>
         :root {
             --primary-color: #ff385c;
@@ -216,7 +216,7 @@
         }
 
         #excelTable thead th:nth-child(2) {
-            width: 270px;
+            width: 550px;
         }
 
         #excelTable thead th:nth-child(3) {
@@ -270,28 +270,36 @@
                 min-width: 2000px; /* Tăng chiều dài của bảng, giá trị có thể điều chỉnh */
             }
     </style>
-</head>
+
 
 <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
         <!-- Toolbar cũ -->
         <nav class="navbar navbar-expand navbar-light bg-white topbar fixed-top shadow px-3" style="margin-left:104px">
             <div class="d-flex align-items-center">
-                <button type="button" class="btn btn-outline-primary btn-sm mx-1" onclick="saveData()">
-                    <i class="fas fa-save"></i> Save
-                </button>
-                <button type="button" class="btn btn-outline-secondary btn-sm mx-1" onclick="undo()">
-                    <i class="fas fa-undo"></i> Undo
-                </button>
-                <button type="button" class="btn btn-outline-secondary btn-sm mx-1" onclick="redo()">
-                    <i class="fas fa-redo"></i> Redo
-                </button>
-                <button type="button" class="btn btn-outline-secondary btn-sm mx-1" onclick="addRow()">
-                    <i class="fas fa-plus"></i>
-                </button>
-                <button type="button" class="btn btn-outline-secondary btn-sm mx-1" onclick="deleteRows()">
-                    <i class="fas fa-trash"></i>
-                </button>
+                @if (ViewBag.MandalaPermission == "write")
+                {
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-1" onclick="saveData()">
+                        <i class="fas fa-save"></i> Save
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm mx-1" onclick="undo()">
+                        <i class="fas fa-undo"></i> Undo
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm mx-1" onclick="redo()">
+                        <i class="fas fa-redo"></i> Redo
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm mx-1" onclick="addRow()">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm mx-1" onclick="deleteRows()">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                }
+                else
+                {
+                    <!-- Nếu quyền chỉ xem, có thể hiển thị nút chỉ để quay về hoặc refresh -->
+                    <span class="text-muted">Chế độ xem</span>
+                }
             </div>
             <div class="mx-auto d-flex align-items-center justify-content-center">
                 <span id="mandalaNameText" class="text-primary font-weight-bold" style="font-size:2.5rem;">
@@ -319,7 +327,7 @@
         </nav>
 
         <!-- Phần Filter mới -->
-        <div class="container-fluid topbar fixed-top" style="margin-top:70px">
+        <div class="container-fluid topbar fixed-top" style="margin-top:70px;width: 1048px;">
             <div class="filter-container">
                 <!-- Chỉ Tiêu -->
                 <div class="filter-item">
@@ -405,13 +413,13 @@
                                         @Html.DropDownListFor(model => sortedModel[i].Target,
                                                  targetOptions,
                                                  "Chọn chỉ tiêu",
-                                                 new { @class = "targetSelect" })
+                                                 new { @class = "targetSelect", style = "width:530px;height: 38px;" })
                                         @Html.HiddenFor(model => sortedModel[i].MandalaLv, new { @class = "hiddenMandalaLv" })
                                     </td>
                                     <td>
                                         @Html.TextBoxFor(model => sortedModel[i].Deadline, "{0:yyyy-MM-dd}", new { type = "date", @class = "form-control" })
                                     </td>
-                                    <td>
+                                    <td style="text-align: center;">
                                         @Html.CheckBoxFor(model => sortedModel[i].Status)
                                     </td>
                                     <td>
@@ -457,9 +465,9 @@
     </div>
 </div>
 
-<!-- Include các scripts cần thiết -->
 <script src="~/vendor/jquery/jquery.min.js"></script>
 <script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-
-<script src="@Url.Content("~/js/mandalaTable.js")"></script>
+<script type="text/javascript">
+    var canEdit = ["owner", "write"].indexOf("@ViewBag.MandalaPermission") !== -1;
+</script>   
+<script src="~/js/mandalaTable.js"></script>

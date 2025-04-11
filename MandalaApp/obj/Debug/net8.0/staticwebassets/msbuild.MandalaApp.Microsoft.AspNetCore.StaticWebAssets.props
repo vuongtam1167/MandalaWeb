@@ -108,6 +108,24 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\avatars\temp\a249b52b-7618-49b9-9125-fc57f231cb3f_Screenshot 2025-02-27 154654.png'))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\img\default-avatar.png'))">
+      <SourceType>Package</SourceType>
+      <SourceId>MandalaApp</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/MandalaApp</BasePath>
+      <RelativePath>img/default-avatar.png</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>hv72swknpo</Fingerprint>
+      <Integrity>o0+OWmLilCDIpl1o9u+0GteP+/j0CkWuqJDifS45khA=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\img\default-avatar.png'))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\demo\chart-area-demo.js'))">
       <SourceType>Package</SourceType>
       <SourceId>MandalaApp</SourceId>
@@ -192,8 +210,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>o273n30iro</Fingerprint>
-      <Integrity>cNaU86ZnfoT7IGwtRnrBTAHxdbITMSL4Krin0JttEHs=</Integrity>
+      <Fingerprint>awvvyzmhy9</Fingerprint>
+      <Integrity>OiEWWyZ6mZpTiMYBBKIQWrNseObHaR9E9PJn+tXotTk=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\mandalaChart.js'))</OriginalItemSpec>
@@ -210,11 +228,29 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>0m1l2akra2</Fingerprint>
-      <Integrity>aKVcX194N2lO+jlYuZbB3woZuj4aKFGpdXr4lMYmUY0=</Integrity>
+      <Fingerprint>egstl5ptui</Fingerprint>
+      <Integrity>spFvU0VXMqf5kIrGv1r1cAJ+iytG+I3KBWvTtzLDUzk=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\mandalaTable.js'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\saveData.js'))">
+      <SourceType>Package</SourceType>
+      <SourceId>MandalaApp</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/MandalaApp</BasePath>
+      <RelativePath>js/saveData.js</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>5ipweew5fc</Fingerprint>
+      <Integrity>47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\saveData.js'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\sb-admin-2.js'))">
       <SourceType>Package</SourceType>

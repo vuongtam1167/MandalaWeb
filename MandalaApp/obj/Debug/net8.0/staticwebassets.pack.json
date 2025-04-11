@@ -29,6 +29,10 @@
       "PackagePath": "staticwebassets\\images\\avatars\\temp\\a249b52b-7618-49b9-9125-fc57f231cb3f_Screenshot 2025-02-27 154654.png"
     },
     {
+      "Id": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\wwwroot\\img\\default-avatar.png",
+      "PackagePath": "staticwebassets\\img\\default-avatar.png"
+    },
+    {
       "Id": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\wwwroot\\js\\demo\\chart-area-demo.js",
       "PackagePath": "staticwebassets\\js\\demo\\chart-area-demo.js"
     },
@@ -51,6 +55,10 @@
     {
       "Id": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\wwwroot\\js\\mandalaTable.js",
       "PackagePath": "staticwebassets\\js\\mandalaTable.js"
+    },
+    {
+      "Id": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\wwwroot\\js\\saveData.js",
+      "PackagePath": "staticwebassets\\js\\saveData.js"
     },
     {
       "Id": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\wwwroot\\js\\sb-admin-2.js",

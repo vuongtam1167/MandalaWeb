@@ -151,7 +151,12 @@ function generateGrid() {
         textarea.dataset.index = index;
         textarea.dataset.mandalaLv = cellNumber;
         textarea.setAttribute("rows", "3");
-        textarea.disabled = true;
+
+        // Nếu không có quyền chỉnh sửa, disable tất cả ô
+        if (!canEdit) {
+            textarea.disabled = true;
+        }
+
         cell.appendChild(textarea);
         container.appendChild(cell);
     }
@@ -160,6 +165,7 @@ function generateGrid() {
 
 // Cập nhật unlocking và đồng bộ các ô theo thứ tự unlocking
 function updateUnlocking() {
+    if (!canEdit) return;
     const unlockOrder = isGrid3x3 ? unlockOrder3x3 : unlockOrder9x9;
     for (let i = 0; i < unlockOrder.length; i++) {
         let cell = document.querySelector(`textarea[data-index="${unlockOrder[i]}"]`);
@@ -197,6 +203,7 @@ function toggleGrid() {
 }
 
 function handleSave() {
+    if (!canEdit) return;
     let gridCells = document.querySelectorAll('.mandala-grid .cell textarea');
     let data = Array.from(gridCells).map(cell => cell.value.trim() === "" ? null : cell.value);
     if (!isGrid3x3 && data.length !== 81) {
@@ -223,6 +230,10 @@ function handleSave() {
 }
 
 function editMandalaName() {
+    if (!canEdit) {
+        alert("Chế độ xem: Không có quyền chỉnh sửa dữ liệu");
+        return;
+    }
     let nameSpan = document.getElementById("mandalaNameText");
     let editBtn = document.getElementById("editMandalaNameBtn");
     if (editBtn.textContent.trim() === "Edit") {
@@ -239,6 +250,7 @@ function editMandalaName() {
 }
 
 function updateMandalaName(newName) {
+    if (!canEdit) return;
     let mandalaId = document.getElementById("mandalaId").value;
     $.ajax({
         type: "POST",

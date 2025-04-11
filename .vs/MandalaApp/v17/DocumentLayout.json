@@ -3,8 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{12B507EF-19A1-4DA6-9618-F42E75825CB0}|MandalaApp\\MandalaApp.csproj|c:\\users\\itser\\downloads\\visualproject\\mandalaapp\\mandalaapp\\controllers\\profilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{12B507EF-19A1-4DA6-9618-F42E75825CB0}|MandalaApp\\MandalaApp.csproj|solutionrelative:mandalaapp\\controllers\\profilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{12B507EF-19A1-4DA6-9618-F42E75825CB0}|MandalaApp\\MandalaApp.csproj|c:\\users\\itser\\downloads\\visualproject\\mandalaapp\\mandalaapp\\views\\index\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{12B507EF-19A1-4DA6-9618-F42E75825CB0}|MandalaApp\\MandalaApp.csproj|solutionrelative:mandalaapp\\views\\index\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{12B507EF-19A1-4DA6-9618-F42E75825CB0}|MandalaApp\\MandalaApp.csproj|c:\\users\\itser\\downloads\\visualproject\\mandalaapp\\mandalaapp\\controllers\\indexcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{12B507EF-19A1-4DA6-9618-F42E75825CB0}|MandalaApp\\MandalaApp.csproj|solutionrelative:mandalaapp\\controllers\\indexcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -19,14 +23,27 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ProfileController.cs",
-              "DocumentMoniker": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\Controllers\\ProfileController.cs",
-              "RelativeDocumentMoniker": "MandalaApp\\Controllers\\ProfileController.cs",
-              "ToolTip": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\Controllers\\ProfileController.cs",
-              "RelativeToolTip": "MandalaApp\\Controllers\\ProfileController.cs",
-              "ViewState": "AgIAAFYAAAAAAAAAAAAIwFIAAAA9AAAAAAAAAA==",
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\Views\\Index\\Index.cshtml",
+              "RelativeDocumentMoniker": "MandalaApp\\Views\\Index\\Index.cshtml",
+              "ToolTip": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\Views\\Index\\Index.cshtml",
+              "RelativeToolTip": "MandalaApp\\Views\\Index\\Index.cshtml",
+              "ViewState": "AgIAAK0BAAAAAAAAAAAAAFcAAABnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-11T01:50:36.469Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "IndexController.cs",
+              "DocumentMoniker": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\Controllers\\IndexController.cs",
+              "RelativeDocumentMoniker": "MandalaApp\\Controllers\\IndexController.cs",
+              "ToolTip": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\Controllers\\IndexController.cs",
+              "RelativeToolTip": "MandalaApp\\Controllers\\IndexController.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-24T06:53:01.978Z",
+              "WhenOpened": "2025-04-11T01:50:06.868Z",
               "EditorCaption": ""
             }
           ]

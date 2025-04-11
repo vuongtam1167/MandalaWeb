@@ -18,37 +18,44 @@ namespace MandalaApp.Controllers
             _repository = repository;
         }
 
-        // Trang Index
+        // Trang Index: hiển thị danh sách MandalaHome của người dùng
         public IActionResult Index()
         {
-            // Lấy ID của user hiện tại từ Claim
             long currentUserId = Convert.ToInt64(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             string avatar = _repository.GetAvatarPathByUserId(currentUserId);
-            // Lấy danh sách MandalaHome của user
             List<MandalaHome> mandalahomes = _repository.GetMandalaHomes(currentUserId);
-            // Trả về view, Model là danh sách MandalaHome
             ViewBag.Avatar = avatar;
             return View(mandalahomes);
         }
 
         [HttpGet]
-        public IActionResult SearchUsers(string query)
+        public IActionResult SearchUsers(string query, long mandalaid)
         {
             if (string.IsNullOrWhiteSpace(query))
             {
                 return Json(new List<UserSearchResult>());
             }
-
-            // Lấy ID của user hiện tại từ Claim
             long currentUserId = Convert.ToInt64(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-
-            // Gọi repository với query và currentUserId để loại trừ user hiện tại
-            var results = _repository.SearchUsers(query, currentUserId);
+            var results = _repository.SearchUsers(query, currentUserId, mandalaid);
             return Json(results);
         }
 
-        // Action xử lý Share
-        // Chia sẻ Mandala cho một User cụ thể với quyền mặc định là "read"
+        [HttpGet]
+        public IActionResult SearchShare(long mandalaid, long usershare)
+        {
+            long currentUserId = Convert.ToInt64(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var results = _repository.SearchShare(mandalaid, usershare);
+            return Json(results);
+        }
+
+        [HttpGet]
+        public JsonResult GetMandalaStatusChart(int mandalaId)
+        {
+            var data = _repository.GetStatusChart(mandalaId);
+            return Json(data); 
+        }
+
+        // Action Share: nếu share chưa tồn tại thì tạo mới, nếu đã tồn tại thì cập nhật quyền
         [HttpPost]
         public IActionResult Share([FromBody] ShareRequest request)
         {
@@ -64,21 +71,34 @@ namespace MandalaApp.Controllers
             }
         }
 
-        // Action xử lý Delete
+        // Action RemoveShare: hủy chia sẻ Mandala cho user cụ thể
+        [HttpPost]
+        public IActionResult RemoveShare(long mandalaId, long sharedUserId)
+        {
+            try
+            {
+                long currentUserId = Convert.ToInt64(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                _repository.RemoveShareMandala(mandalaId, sharedUserId, currentUserId);
+                return Ok(new { message = "Mandala share removed successfully." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        // Action Delete: xóa Mandala
         [HttpPost]
         public IActionResult Delete(long mandalaId)
         {
             try
             {
-                // Lấy user ID của người thực hiện xóa
                 long currentUserId = Convert.ToInt64(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-                // Gọi repository để xóa Mandala (hoặc soft delete)
                 _repository.DeleteMandala(mandalaId, currentUserId);
                 return Ok(new { message = "Mandala deleted successfully." });
             }
             catch (Exception ex)
             {
-                // Ghi log hoặc xử lý lỗi
                 return BadRequest(ex.Message);
             }
         }

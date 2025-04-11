@@ -60,6 +60,12 @@ namespace MandalaApp.Controllers
                 return View();
             }
 
+            if (repository.IsEmailExists(email))
+            {
+                ViewBag.ErrorMessage = "Email này đã được dùng!";
+                return View();
+            }
+
             string hashedPassword = ComputeMD5Hash(password);
 
             var user = new User

@@ -17,9 +17,18 @@ function debounce(fn, delay) {
 // Lấy dữ liệu của 1 dòng
 function getRowData($row) {
     var idVal = $row.find("input.hiddenID").val();
+    // Lấy giá trị từ hiddenMandalaLv hoặc từ select.targetSelect nếu không có
+    var mandalaLvStr = $row.find("input.hiddenMandalaLv").val() || $row.find("select.targetSelect").val() || "";
+    // Chuyển sang số, nếu không chuyển được thì mặc định là 0
+    var mandalaLv = parseInt(mandalaLvStr, 10);
+    if (isNaN(mandalaLv)) {
+        mandalaLv = 0;
+    }
+
     return {
         ID: idVal === "" ? 0 : idVal,
         Target: $row.find("select.targetSelect").val() || "",
+        MandalaLv: mandalaLv,
         Deadline: $row.find("input[type='date']").val() || "",
         Status: $row.find("input[type='checkbox']").prop("checked") || false,
         Action: $row.find("input[name$='.Action']").val() || "",
@@ -39,6 +48,12 @@ function getFormState() {
 function setRowData($row, data) {
     $row.find("input.hiddenID").val(data.ID);
     $row.find("select.targetSelect").val(data.Target);
+    // Nếu có trường MandalaLv trong dữ liệu, dùng nó; nếu không, gán giá trị của Target
+    if (data.MandalaLv && data.MandalaLv !== "") {
+        $row.find("input.hiddenMandalaLv").val(data.MandalaLv);
+    } else {
+        $row.find("input.hiddenMandalaLv").val(data.Target);
+    }
     $row.find("input[type='date']").val(data.Deadline);
     $row.find("input[type='checkbox']").prop("checked", data.Status);
     $row.find("input[name$='.Action']").val(data.Action);
@@ -59,7 +74,9 @@ function setFormState(stateObj) {
     $tbody.empty();
     for (var i = 0; i < tableState.length; i++) {
         var $newRow;
-        if ($templateRow) { $newRow = $templateRow.clone(); }
+        if ($templateRow) {
+            $newRow = $templateRow.clone();
+        }
         else {
             $newRow = $("<tr>" +
                 "<td><span class='rowIndex'></span><input type='hidden' name='[0].ID' class='hiddenID' /></td>" +
@@ -87,18 +104,22 @@ function setFormState(stateObj) {
     autoSortTable();
 }
 
-// Hàm tự động sắp xếp bảng theo thứ tự target và Deadline
+// Hàm tự động sắp xếp bảng theo thứ tự target (theo levelOrder) và Deadline
 function autoSortTable() {
     var $tbody = $("#excelTable tbody");
     var rows = $tbody.find("tr").get();
     rows.sort(function (a, b) {
-        var lvA = $(a).find("input.hiddenMandalaLv").val(), lvB = $(b).find("input.hiddenMandalaLv").val();
-        var indexA = levelOrder.indexOf(lvA), indexB = levelOrder.indexOf(lvB);
+        // Lấy giá trị MandalaLv đã gán
+        var lvA = $(a).find("input.hiddenMandalaLv").val();
+        var lvB = $(b).find("input.hiddenMandalaLv").val();
+        var indexA = levelOrder.indexOf(lvA);
+        var indexB = levelOrder.indexOf(lvB);
         if (indexA === -1) indexA = Number.MAX_SAFE_INTEGER;
         if (indexB === -1) indexB = Number.MAX_SAFE_INTEGER;
         if (indexA !== indexB) { return indexA - indexB; }
         else {
-            var deadlineA = $(a).find("input[type='date']").val(), deadlineB = $(b).find("input[type='date']").val();
+            var deadlineA = $(a).find("input[type='date']").val();
+            var deadlineB = $(b).find("input[type='date']").val();
             var dateA = deadlineA ? new Date(deadlineA) : new Date(8640000000000000);
             var dateB = deadlineB ? new Date(deadlineB) : new Date(8640000000000000);
             return dateA - dateB;
@@ -114,7 +135,8 @@ function autoSortTable() {
 function pushState() {
     var currentState = JSON.stringify(getCompleteState());
     if (undoHistory.length === 0 || undoHistory[undoHistory.length - 1] !== currentState) {
-        undoHistory.push(currentState); redoHistory = [];
+        undoHistory.push(currentState);
+        redoHistory = [];
     }
 }
 
@@ -134,7 +156,7 @@ function redo() {
     } else { alert("Không còn bước Redo!"); }
 }
 
-// Hàm kiểm tra MandalaLv có thuộc nhóm được chọn hay không
+// Các hàm liên quan đến MandalaLv và nhóm (giữ nguyên như cũ)
 function isInGroup(mandalaLv, group) {
     switch (group) {
         case "M0":
@@ -160,6 +182,8 @@ function isInGroup(mandalaLv, group) {
     }
 }
 
+
+
 function search() {
     var criteria = $("#criteria").val().trim().toLowerCase();
     var startDate = $("#startDate").val();
@@ -175,18 +199,14 @@ function search() {
         var targetText = $row.find("select.targetSelect option:selected").text().toLowerCase();
         var rowDeadline = $row.find("input[type='date']").val();
         var rowAssignee = $row.find("input[name$='.Person']").val().toLowerCase();
-        // Lấy giá trị MandalaLv từ input ẩn và chuyển về số
         var hiddenMandalaLvVal = $row.find("input.hiddenMandalaLv").val();
         var mandalaLv = parseInt(hiddenMandalaLvVal, 10);
 
         var showRow = true;
 
-        // Lọc theo chỉ tiêu nếu có nhập
         if (criteria && targetText.indexOf(criteria) === -1) {
             showRow = false;
         }
-
-        // Lọc theo nhóm Mục Tiêu dựa trên MandalaLv
         if (selectedMuctieus.length > 0) {
             var groupMatch = false;
             selectedMuctieus.forEach(function (group) {
@@ -198,16 +218,12 @@ function search() {
                 showRow = false;
             }
         }
-
-        // Lọc theo Deadline bắt đầu và kết thúc
         if (startDate && rowDeadline < startDate) {
             showRow = false;
         }
         if (endDate && rowDeadline > endDate) {
             showRow = false;
         }
-
-        // Lọc theo Người thực hiện
         if (assignee && rowAssignee.indexOf(assignee) === -1) {
             showRow = false;
         }
@@ -217,7 +233,13 @@ function search() {
 }
 
 // --- Các chức năng khác ---
+// Hàm chỉnh sửa tên Mandala (giữ nguyên logic ban đầu)
 function editMandalaName() {
+
+    if (!canEdit) {
+        alert("Chế độ xem: Không có quyền chỉnh sửa dữ liệu");
+        return;
+    }
     var nameSpan = document.getElementById("mandalaNameText");
     var editBtn = document.getElementById("editMandalaNameBtn");
     if (editBtn.textContent.trim() === "Edit") {
@@ -234,6 +256,7 @@ function editMandalaName() {
 }
 
 function updateMandalaName(newName) {
+
     var mandalaId = $("#mandalaId").val();
     $.ajax({
         type: "POST",
@@ -271,6 +294,7 @@ function addRow() {
     });
     $newRow.find("input.hiddenID").val("");
     $newRow.find("select.targetSelect").val("");
+    // Khi thêm dòng mới, có thể khởi tạo hiddenMandalaLv rỗng hoặc giá trị mặc định nếu cần
     $newRow.find("input.hiddenMandalaLv").val("");
     $newRow.find("input").not(".hiddenID").each(function () { $(this).val("").prop("checked", false); });
     $("#excelTable tbody").append($newRow);
@@ -298,8 +322,18 @@ $("#excelTable tbody").on("click", "tr td:first-child", function (e) {
 });
 
 $(document).ready(function () {
-    if ($("#excelTable tbody tr").length > 0) { $templateRow = $("#excelTable tbody tr").first().clone(); }
-    else {
+    // Nếu có dữ liệu mẫu đã load sẵn, lưu mẫu dòng đầu tiên
+    if ($("#excelTable tbody tr").length > 0) {
+        $templateRow = $("#excelTable tbody tr").first().clone();
+        // Cập nhật levelOrder từ dữ liệu mẫu nếu cần
+        $("#excelTable tbody tr").each(function () {
+            var val = $(this).find("input.hiddenMandalaLv").val();
+            // Nếu giá trị tồn tại và chưa có trong mảng levelOrder, thêm vào
+            if (val && levelOrder.indexOf(val) === -1) {
+                levelOrder.push(val);
+            }
+        });
+    } else {
         $templateRow = $("<tr>" +
             "<td><span class='rowIndex'></span><input type='hidden' name='[0].ID' class='hiddenID' /></td>" +
             "<td>" +
@@ -316,14 +350,26 @@ $(document).ready(function () {
             "</tr>");
         $("#excelTable tbody").append($templateRow);
     }
-    pushState();
+
+    // Nếu các option của select đã khởi tạo, đảm bảo levelOrder chứa các giá trị cần sắp xếp
     $("#excelTable select.targetSelect:first option").each(function () {
         var val = $(this).val();
-        if (val && val !== "Chọn chỉ tiêu") { levelOrder.push(val); }
+        if (val && val !== "Chọn chỉ tiêu" && levelOrder.indexOf(val) === -1) {
+            levelOrder.push(val);
+        }
     });
-    $("#excelForm").on("input change", "input, select, textarea", debounce(function () { pushState(); autoSortTable(); }, 1000));
+
+    // Sau khi load dữ liệu mẫu, gọi sắp xếp lại bảng
+    autoSortTable();
+
+    $("#excelForm").on("input change", "input, select, textarea", debounce(function () {
+        pushState();
+        autoSortTable();
+    }, 1000));
+
     $("#excelTable").on("change", "select.targetSelect", function () {
         var selectedTarget = $(this).val();
+        // Cập nhật hiddenMandalaLv khi chọn chỉ tiêu mới
         $(this).closest("tr").find("input.hiddenMandalaLv").val(selectedTarget);
         pushState();
         autoSortTable();
@@ -361,8 +407,14 @@ document.getElementById("startDate").addEventListener("change", function () {
 
 // --- Thêm xử lý: Khi click vào filter-item thì thực hiện chức năng filter ngay lập tức ---
 $(document).ready(function () {
+    if (!canEdit) {
+        // Vô hiệu hóa tất cả các input, select, textarea trong bảng
+        $("#excelForm input, #excelForm select, #excelForm textarea").attr("disabled", true);
+        // Ngoài ra, ẩn nút "Edit" nếu muốn
+        $("#editMandalaNameBtn").hide();
+    }
+
     $(".filter-item").on("click", function (e) {
-        // Nếu click vào element không phải input, thực hiện search()
         if (e.target.tagName.toLowerCase() !== "input") {
             search();
         }
