@@ -3,20 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{12B507EF-19A1-4DA6-9618-F42E75825CB0}|MandalaApp\\MandalaApp.csproj|c:\\users\\itser\\downloads\\visualproject\\mandalaapp\\mandalaapp\\wwwroot\\js\\mandalatable.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{12B507EF-19A1-4DA6-9618-F42E75825CB0}|MandalaApp\\MandalaApp.csproj|solutionrelative:mandalaapp\\wwwroot\\js\\mandalatable.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{12B507EF-19A1-4DA6-9618-F42E75825CB0}|MandalaApp\\MandalaApp.csproj|c:\\users\\itser\\downloads\\visualproject\\mandalaapp\\mandalaapp\\controllers\\tablecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{12B507EF-19A1-4DA6-9618-F42E75825CB0}|MandalaApp\\MandalaApp.csproj|solutionrelative:mandalaapp\\controllers\\tablecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{12B507EF-19A1-4DA6-9618-F42E75825CB0}|MandalaApp\\MandalaApp.csproj|c:\\users\\itser\\downloads\\visualproject\\mandalaapp\\mandalaapp\\dataaccess\\mandalarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{12B507EF-19A1-4DA6-9618-F42E75825CB0}|MandalaApp\\MandalaApp.csproj|solutionrelative:mandalaapp\\dataaccess\\mandalarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{12B507EF-19A1-4DA6-9618-F42E75825CB0}|MandalaApp\\MandalaApp.csproj|c:\\users\\itser\\downloads\\visualproject\\mandalaapp\\mandalaapp\\views\\table\\table.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{12B507EF-19A1-4DA6-9618-F42E75825CB0}|MandalaApp\\MandalaApp.csproj|solutionrelative:mandalaapp\\views\\table\\table.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{12B507EF-19A1-4DA6-9618-F42E75825CB0}|MandalaApp\\MandalaApp.csproj|c:\\users\\itser\\downloads\\visualproject\\mandalaapp\\mandalaapp\\controllers\\indexcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{12B507EF-19A1-4DA6-9618-F42E75825CB0}|MandalaApp\\MandalaApp.csproj|solutionrelative:mandalaapp\\controllers\\indexcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,56 +18,32 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Table.cshtml",
-              "DocumentMoniker": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\Views\\Table\\Table.cshtml",
-              "RelativeDocumentMoniker": "MandalaApp\\Views\\Table\\Table.cshtml",
-              "ToolTip": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\Views\\Table\\Table.cshtml",
-              "RelativeToolTip": "MandalaApp\\Views\\Table\\Table.cshtml",
-              "ViewState": "AgIAAHcBAAAAAAAAAAAAAKABAAB6AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-04-09T08:35:05.67Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "MandalaRepository.cs",
               "DocumentMoniker": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\DataAccess\\MandalaRepository.cs",
               "RelativeDocumentMoniker": "MandalaApp\\DataAccess\\MandalaRepository.cs",
               "ToolTip": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\DataAccess\\MandalaRepository.cs",
               "RelativeToolTip": "MandalaApp\\DataAccess\\MandalaRepository.cs",
-              "ViewState": "AgIAAIMBAAAAAAAAAAAkwIABAACTAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T08:17:03.623Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "mandalaTable.js",
-              "DocumentMoniker": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\wwwroot\\js\\mandalaTable.js",
-              "RelativeDocumentMoniker": "MandalaApp\\wwwroot\\js\\mandalaTable.js",
-              "ToolTip": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\wwwroot\\js\\mandalaTable.js",
-              "RelativeToolTip": "MandalaApp\\wwwroot\\js\\mandalaTable.js",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAQwPkAAAAvAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-04-09T04:31:34.504Z",
+              "WhenOpened": "2025-04-16T07:00:46.922Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "TableController.cs",
-              "DocumentMoniker": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\Controllers\\TableController.cs",
-              "RelativeDocumentMoniker": "MandalaApp\\Controllers\\TableController.cs",
-              "ToolTip": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\Controllers\\TableController.cs",
-              "RelativeToolTip": "MandalaApp\\Controllers\\TableController.cs",
-              "ViewState": "AgIAAFwAAAAAAAAAAAAIwFMAAABhAAAAAAAAAA==",
+              "Title": "IndexController.cs",
+              "DocumentMoniker": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\Controllers\\IndexController.cs",
+              "RelativeDocumentMoniker": "MandalaApp\\Controllers\\IndexController.cs",
+              "ToolTip": "C:\\Users\\ITSer\\Downloads\\VisualProject\\MandalaApp\\MandalaApp\\Controllers\\IndexController.cs",
+              "RelativeToolTip": "MandalaApp\\Controllers\\IndexController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T04:32:32.864Z"
+              "WhenOpened": "2025-04-11T01:50:06.868Z"
             }
           ]
         }
